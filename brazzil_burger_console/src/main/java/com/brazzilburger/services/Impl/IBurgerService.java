@@ -11,5 +11,9 @@ public interface IBurgerService {
 
     Burger creerBurger(String nom, BigDecimal prix, String imagePath) throws SQLException;
     List<Burger> listerBurgers(boolean disponiblesUniquement) throws SQLException;
+    Burger getBurgerById(int id) throws SQLException;
+    Burger modifierBurger(Burger burger, String nom, BigDecimal prix, String imagePath) throws SQLException;
+
+
 
 }

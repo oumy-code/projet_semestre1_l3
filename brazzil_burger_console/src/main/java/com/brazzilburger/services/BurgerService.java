@@ -41,6 +41,22 @@ public class BurgerService implements IBurgerService {
     public List<Burger> listerBurgers(boolean disponiblesUniquement) throws SQLException {
         return disponiblesUniquement ? repository.findAllNonArchived() : repository.findAll();
     }
+     @Override
+    public Burger getBurgerById(int id) throws SQLException {
+        return repository.findById(id);
+    }
+      @Override
+    public Burger modifierBurger(Burger burger, String nom, BigDecimal prix, String imagePath) throws SQLException {
+        if (nom != null && !nom.isEmpty()) burger.setNom(nom);
+        if (prix != null) burger.setPrix(prix);
+        if (imagePath != null && !imagePath.isEmpty()) {
+            String imageUrl = CloudinaryConfig.uploadImage(imagePath, "burgers");
+            if (imageUrl != null) burger.setImage(imageUrl);
+        }
+        repository.update(burger);
+        return burger;
+    }
+
 
    
 

@@ -47,7 +47,7 @@ public class BurgerView {
                 switch (choix) {
                     case 1 -> ajouterBurger();
                     case 2 -> listerBurgers(false);
-                    //case 3 -> listerBurgers(true);
+                    case 3 -> listerBurgers(true);
                     //case 4 -> modifierBurger();
                     //case 5 -> archiverBurger();
                     //case 6 -> desarchiverBurger();
@@ -97,6 +97,51 @@ public class BurgerView {
             System.out.printf("ID:%d | %s | %.2f FCFA | %s%n",
                               b.getId(), b.getNom(), b.getPrix(), b.isArchive() ? "Archivé" : "Disponible");
         }
+    }
+     private void modifierBurger() throws SQLException {
+        System.out.println("\n--- MODIFIER UN BURGER ---");
+        listerBurgers(false);
+        System.out.print("ID du burger à modifier: ");
+        
+        int id;
+        try {
+            id = scanner.nextInt();
+            scanner.nextLine();
+        } catch (InputMismatchException e) {
+            System.out.println("❌ ID invalide.");
+            scanner.nextLine();
+            return;
+        }
+
+        Burger burger = service.getBurgerById(id);
+        if (burger == null) {
+            System.out.println("❌ Burger non trouvé pour l'ID " + id);
+            return;
+        }
+
+        System.out.print("Nouveau nom [" + burger.getNom() + "]: ");
+        String nom = scanner.nextLine();
+        
+        BigDecimal prix = null;
+        String prixStr;
+        while (prix == null) {
+            System.out.print("Nouveau prix [" + burger.getPrix() + "] (ENTER pour garder l'ancien): ");
+            prixStr = scanner.nextLine();
+            if (prixStr.isEmpty()) {
+                break; 
+            }
+            try {
+                prix = new BigDecimal(prixStr);
+            } catch (NumberFormatException e) {
+                System.out.println("❌ Veuillez entrer un prix valide (nombre).");
+            }
+        }
+        
+        System.out.print("Nouvelle image (ENTER pour garder l'ancienne): ");
+        String image = scanner.nextLine();
+
+        service.modifierBurger(burger, nom, prix, image);
+        System.out.println("✅ Burger modifié!");
     }
 
    
