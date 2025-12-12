@@ -18,6 +18,7 @@ public interface IMenuService {
      List<Menu> listerMenus(boolean disponiblesUniquement) throws SQLException;
     Menu getMenuById(int id) throws SQLException;
     Menu modifierMenu(Menu menu, String nom, String imagePath) throws SQLException;
+    void archiverMenu(int id) throws SQLException;
 
 
 

@@ -76,5 +76,10 @@ public class MenuService implements IMenuService {
         menuRepository.update(menu);
         return menu;
     }
+    @Override
+    public void archiverMenu(int id) throws SQLException {
+        menuRepository.archive(id);
+    }
+
     
 }

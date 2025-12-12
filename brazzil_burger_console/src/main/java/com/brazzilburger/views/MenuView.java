@@ -265,6 +265,21 @@ public class MenuView {
         service.modifierMenu(menu, nom, image); 
         System.out.println("✅ Menu modifié!");
     }
+        private void archiverMenu() throws SQLException {
+        listerMenus(true);
+        System.out.print("ID du menu à archiver: ");
+        int id;
+        try {
+            id = scanner.nextInt();
+            scanner.nextLine();
+        } catch (InputMismatchException e) {
+            System.out.println("❌ ID invalide.");
+            scanner.nextLine();
+            return;
+        }
+        service.archiverMenu(id); // Appel du service
+        System.out.println("✅ Menu archivé!");
+    }
 
 
 }
