@@ -46,7 +46,7 @@ public class MenuView {
             try {
                 switch (choix) {
                     case 1 -> creerMenu();
-                    //case 2 -> listerMenus(false);
+                    case 2 -> listerMenus(false);
                     //case 3 -> listerMenus(true);
                     //case 4 -> voirDetailsMenu();
                     //case 5 -> modifierMenu();
@@ -198,4 +198,19 @@ public class MenuView {
         }
     }
 }
+ private void listerMenus(boolean disponibles) throws SQLException {
+        List<Menu> menus = service.listerMenus(disponibles); // Appel du service
+        if (menus.isEmpty()) {
+            System.out.println("Aucun menu trouvé.");
+            return;
+        }
+        for (Menu m : menus) {
+            // Assurez-vous que getCompositions() retourne un objet non nul si la couche Service/Repository le garantit
+            int compositionSize = m.getCompositions() != null ? m.getCompositions().size() : 0;
+            System.out.printf("ID:%d | %s | %d compositions | %s%n",
+                    m.getId(), m.getNom(), compositionSize,
+                    m.isArchive() ? "📦 Archivé" : "✅ Disponible");
+        }
+    }
+
 }

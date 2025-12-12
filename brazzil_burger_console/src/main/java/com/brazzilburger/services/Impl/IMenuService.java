@@ -15,5 +15,6 @@ public interface IMenuService {
      List<Burger> getBurgersDisponibles() throws SQLException;
 
     List<Complement> getComplementsDisponibles() throws SQLException;
+     List<Menu> listerMenus(boolean disponiblesUniquement) throws SQLException;
 
 }

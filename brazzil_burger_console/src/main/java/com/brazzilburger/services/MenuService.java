@@ -58,5 +58,9 @@ public class MenuService implements IMenuService {
     public List<Complement> getComplementsDisponibles() throws SQLException {
         return complementRepository.findAllNonArchived();
     }
+      @Override
+    public List<Menu> listerMenus(boolean disponiblesUniquement) throws SQLException {
+        return disponiblesUniquement ? menuRepository.findAllNonArchived() : menuRepository.findAll();
+    }
     
 }
