@@ -46,7 +46,7 @@ public class ComplementView {
             try {
                 switch (choix) {
                     case 1 -> ajouterComplement();
-                    //case 2 -> listerComplements(false);
+                    case 2 -> listerComplements(false);
                     //case 3 -> listerComplements(true);
                     //case 4 -> modifierComplement();
                     //case 5 -> archiverComplement();
@@ -82,10 +82,8 @@ public class ComplementView {
         System.out.print("Chemin image (ENTER pour ignorer): ");
         String image = scanner.nextLine();
 
-        // 🔵 Choix du TYPE (BOISSON/ FRITES) - Logique de saisie dans la View
         ComplementType type = choisirTypeComplement();
 
-        // Appel du Service avec les données saisies
         Complement complement = service.creerComplement(nom, prix, image, type);
 
         System.out.println("✅ Complément créé: " + complement.getNom() + " (ID: " + complement.getId() + ")");
@@ -100,7 +98,7 @@ public class ComplementView {
             
             try {
                 int choix = scanner.nextInt();
-                scanner.nextLine(); // Consomme le retour à la ligne
+                scanner.nextLine(); 
                 
                 return switch (choix) {
                     case 1 -> ComplementType.BOISSON;
@@ -116,4 +114,21 @@ public class ComplementView {
             }
         }
     }
+      private void listerComplements(boolean disponibles) throws SQLException {
+        List<Complement> complements = service.listerComplements(disponibles); 
+        
+        System.out.println(disponibles ? "\n--- COMPLÉMENTS DISPONIBLES ---" : "\n--- TOUS LES COMPLÉMENTS ---");
+        if (complements.isEmpty()) {
+            System.out.println("Aucun complément trouvé.");
+            return;
+        }
+        for (Complement c : complements) {
+            System.out.printf(
+                "ID:%d | %s | %.2f FCFA | Type: %s | %s%n",
+                c.getId(), c.getNom(), c.getPrix(), c.getType(),
+                c.isArchive() ? "📦 Archivé" : "✅ Disponible"
+            );
+        }
+    }
+
 }

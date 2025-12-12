@@ -47,4 +47,8 @@ public class ComplementService implements IComplementService {
 
         return complement;
     }
+      @Override
+    public List<Complement> listerComplements(boolean disponiblesUniquement) throws SQLException {
+        return disponiblesUniquement ? repository.findAllNonArchived() : repository.findAll();
+    }
 }
