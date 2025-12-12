@@ -47,7 +47,7 @@ public class ComplementView {
                 switch (choix) {
                     case 1 -> ajouterComplement();
                     case 2 -> listerComplements(false);
-                    //case 3 -> listerComplements(true);
+                    case 3 -> listerComplements(true);
                     //case 4 -> modifierComplement();
                     //case 5 -> archiverComplement();
                     //case 6 -> desarchiverComplement();

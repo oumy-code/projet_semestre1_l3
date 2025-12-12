@@ -51,4 +51,9 @@ public class ComplementService implements IComplementService {
     public List<Complement> listerComplements(boolean disponiblesUniquement) throws SQLException {
         return disponiblesUniquement ? repository.findAllNonArchived() : repository.findAll();
     }
+     @Override
+    public Complement getComplementById(int id) throws SQLException {
+        return repository.findById(id);
+    }
+
 }
