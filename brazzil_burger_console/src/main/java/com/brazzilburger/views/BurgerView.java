@@ -48,8 +48,8 @@ public class BurgerView {
                     case 1 -> ajouterBurger();
                     case 2 -> listerBurgers(false);
                     case 3 -> listerBurgers(true);
-                    //case 4 -> modifierBurger();
-                    //case 5 -> archiverBurger();
+                    case 4 -> modifierBurger();
+                    case 5 -> archiverBurger();
                     //case 6 -> desarchiverBurger();
                     case 0 -> { return; }
                     default -> System.out.println("❌ Choix invalide");
@@ -143,6 +143,25 @@ public class BurgerView {
         service.modifierBurger(burger, nom, prix, image);
         System.out.println("✅ Burger modifié!");
     }
+     private void archiverBurger() throws SQLException {
+        System.out.println("\n--- ARCHIVER UN BURGER ---");
+        listerBurgers(true); 
+        System.out.print("ID à archiver: ");
+        
+        int id;
+        try {
+            id = scanner.nextInt();
+            scanner.nextLine();
+        } catch (InputMismatchException e) {
+            System.out.println("❌ ID invalide.");
+            scanner.nextLine();
+            return;
+        }
+
+        service.archiverBurger(id);
+        System.out.println("✅ Burger archivé!");
+    }
+
 
    
 }

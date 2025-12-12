@@ -57,6 +57,11 @@ public class BurgerService implements IBurgerService {
         return burger;
     }
 
+     @Override
+    public void archiverBurger(int id) throws SQLException {
+        repository.archive(id);
+    }
+
 
    
 

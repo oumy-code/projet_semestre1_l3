@@ -13,6 +13,8 @@ public interface IBurgerService {
     List<Burger> listerBurgers(boolean disponiblesUniquement) throws SQLException;
     Burger getBurgerById(int id) throws SQLException;
     Burger modifierBurger(Burger burger, String nom, BigDecimal prix, String imagePath) throws SQLException;
+     void archiverBurger(int id) throws SQLException;
+
 
 
 
