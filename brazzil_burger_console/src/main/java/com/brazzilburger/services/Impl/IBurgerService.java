@@ -10,4 +10,6 @@ public interface IBurgerService {
     
 
     Burger creerBurger(String nom, BigDecimal prix, String imagePath) throws SQLException;
+    List<Burger> listerBurgers(boolean disponiblesUniquement) throws SQLException;
+
 }

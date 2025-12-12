@@ -37,4 +37,11 @@ public class BurgerService implements IBurgerService {
         repository.create(burger);
         return burger;
     }
+    @Override
+    public List<Burger> listerBurgers(boolean disponiblesUniquement) throws SQLException {
+        return disponiblesUniquement ? repository.findAllNonArchived() : repository.findAll();
+    }
+
+   
+
 }

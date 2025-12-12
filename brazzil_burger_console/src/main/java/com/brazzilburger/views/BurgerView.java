@@ -46,7 +46,7 @@ public class BurgerView {
             try {
                 switch (choix) {
                     case 1 -> ajouterBurger();
-                    //case 2 -> listerBurgers(false);
+                    case 2 -> listerBurgers(false);
                     //case 3 -> listerBurgers(true);
                     //case 4 -> modifierBurger();
                     //case 5 -> archiverBurger();
@@ -85,6 +85,19 @@ public class BurgerView {
         // Appel de la logique métier dans le service
         Burger burger = service.creerBurger(nom, prix, image);
         System.out.println("✅ Burger créé: " + burger.getNom() + " (ID: " + burger.getId() + ")");
+    }
+     private void listerBurgers(boolean disponibles) throws SQLException {
+        List<Burger> burgers = service.listerBurgers(disponibles); 
+        
+        System.out.println(disponibles ? "\n--- BURGERS DISPONIBLES ---" : "\n--- TOUS LES BURGERS ---");
+        if (burgers.isEmpty()) {
+            System.out.println("Aucun burger trouvé.");
+            return;
+        }
+        for (Burger b : burgers) {
+            System.out.printf("ID:%d | %s | %.2f FCFA | %s%n",
+                              b.getId(), b.getNom(), b.getPrix(), b.isArchive() ? "Archivé" : "Disponible");
+        }
     }
 
    
