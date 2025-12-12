@@ -47,7 +47,7 @@ public class MenuView {
                 switch (choix) {
                     case 1 -> creerMenu();
                     case 2 -> listerMenus(false);
-                    //case 3 -> listerMenus(true);
+                    case 3 -> listerMenus(true);
                     //case 4 -> voirDetailsMenu();
                     //case 5 -> modifierMenu();
                     //case 6 -> gererCompositions();
