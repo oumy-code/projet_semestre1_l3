@@ -50,8 +50,8 @@ public class MenuView {
                     case 3 -> listerMenus(true);
                     case 4 -> voirDetailsMenu();
                     case 5 -> modifierMenu();
-                    //case 6 -> gererCompositions();
-                    //case 7 -> archiverMenu();
+                    case 6 -> gererCompositions();
+                    case 7 -> archiverMenu();
                     case 0 -> { return; }
                     default -> System.out.println("❌ Choix invalide");
                 }
@@ -199,13 +199,13 @@ public class MenuView {
     }
 }
  private void listerMenus(boolean disponibles) throws SQLException {
-        List<Menu> menus = service.listerMenus(disponibles); // Appel du service
+        List<Menu> menus = service.listerMenus(disponibles); 
         if (menus.isEmpty()) {
             System.out.println("Aucun menu trouvé.");
             return;
         }
         for (Menu m : menus) {
-            // Assurez-vous que getCompositions() retourne un objet non nul si la couche Service/Repository le garantit
+           
             int compositionSize = m.getCompositions() != null ? m.getCompositions().size() : 0;
             System.out.printf("ID:%d | %s | %d compositions | %s%n",
                     m.getId(), m.getNom(), compositionSize,
@@ -277,9 +277,186 @@ public class MenuView {
             scanner.nextLine();
             return;
         }
-        service.archiverMenu(id); // Appel du service
+        service.archiverMenu(id); 
         System.out.println("✅ Menu archivé!");
     }
+      private void gererCompositions() throws SQLException {
+        listerMenus(false);
+        System.out.print("ID du menu à gérer: ");
+        int idMenu;
+        try {
+            idMenu = scanner.nextInt();
+            scanner.nextLine();
+        } catch (InputMismatchException e) {
+            System.out.println("❌ ID invalide.");
+            scanner.nextLine();
+            return;
+        }
+        
+        Menu menu = service.getMenuById(idMenu);
+        if (menu == null) {
+            System.out.println("❌ Menu non trouvé.");
+            return;
+        }
+
+        while (true) {
+            System.out.println("\n--- GESTION COMPOSITIONS MENU " + idMenu + " ---");
+            System.out.println("1. Ajouter une composition simple (Burger OU Complément)"); // NOUVELLE OPTION
+            System.out.println("3. Voir compositions actuelles");
+            System.out.println("4. Supprimer une composition");
+            System.out.println("0. Retour");
+            System.out.print("Choix: ");
+            
+            int choix;
+            try {
+                choix = scanner.nextInt();
+                scanner.nextLine();
+            } catch (InputMismatchException e) {
+                System.out.println("❌ Choix invalide.");
+                scanner.nextLine();
+                continue;
+            }
+
+
+            switch (choix) {
+                case 1 -> ajouterCompositionSimple(idMenu); 
+              
+                case 3 -> {
+                  
+                    Menu m = service.getMenuById(idMenu); 
+                    System.out.println("\nCompositions actuelles:");
+                    if (m != null && m.getCompositions() != null) m.getCompositions().forEach(System.out::println);
+                    else System.out.println("(Aucune)");
+                }
+                case 4 -> supprimerComposition(idMenu);
+                case 0 -> { return; }
+                default -> System.out.println("❌ Choix invalide.");
+            }
+        }
+    }
+     private void supprimerComposition(int idMenu) throws SQLException {
+        Menu menu = service.getMenuById(idMenu);
+        if (menu == null || menu.getCompositions() == null || menu.getCompositions().isEmpty()) {
+             System.out.println("❌ Menu non trouvé ou aucune composition à supprimer.");
+             return;
+        }
+        
+      
+        System.out.println("\nCompositions actuelles:");
+        menu.getCompositions().forEach(comp -> System.out.println("ID:" + comp.getId() + " - " + comp));
+        
+        System.out.print("ID de la composition à supprimer: ");
+        int idComp;
+        try {
+            idComp = scanner.nextInt();
+            scanner.nextLine();
+        } catch (InputMismatchException e) {
+            System.out.println("❌ ID invalide.");
+            scanner.nextLine();
+            return;
+        }
+        
+        service.supprimerComposition(idComp); 
+        System.out.println("✅ Composition supprimée!");
+    }
+  private void ajouterCompositionSimple(int idMenu) throws SQLException {
+        System.out.println("\n--- AJOUT COMPOSITION SIMPLE ---");
+        System.out.println("1. Ajouter un Burger");
+        System.out.println("2. Ajouter un Complément (Frites, Boisson, etc.)");
+        System.out.print("Choix (1 ou 2): ");
+
+        int choix;
+        try {
+            choix = scanner.nextInt();
+            scanner.nextLine();
+        } catch (InputMismatchException e) {
+            System.out.println("❌ Choix invalide.");
+            scanner.nextLine();
+            return;
+        }
+
+        switch (choix) {
+            case 1 -> ajouterUnSeulBurger(idMenu);
+            case 2 -> ajouterUnSeulComplement(idMenu);
+            default -> System.out.println("❌ Choix invalide.");
+        }
+    }
+      private void ajouterUnSeulBurger(int idMenu) throws SQLException {
+        List<Burger> burgers = service.getBurgersDisponibles();
+        if (burgers.isEmpty()) {
+            System.out.println("❌ Aucun burger disponible.");
+            return;
+        }
+
+        System.out.println("\nBurgers disponibles :");
+        for (Burger b : burgers) {
+            System.out.printf("%d. %s | %.2f FCFA%n", b.getId(), b.getNom(), b.getPrix());
+        }
+        System.out.print("ID du burger à ajouter : ");
+
+        int idB;
+        try {
+            idB = scanner.nextInt();
+            scanner.nextLine();
+        } catch (InputMismatchException e) {
+            System.out.println("❌ ID invalide.");
+            scanner.nextLine();
+            return;
+        }
+
+        Burger burgerSelectionne = burgers.stream()
+            .filter(b -> b.getId() == idB)
+            .findFirst()
+            .orElse(null);
+
+        if (burgerSelectionne == null) {
+            System.out.println("❌ Burger invalide ou non disponible !");
+            return;
+        }
+
+        
+        service.ajouterComposition(idMenu, idB, null, 1);
+        System.out.println("✅ Burger ajouté : " + burgerSelectionne.getNom() + " au menu " + idMenu);
+    }
+    private void ajouterUnSeulComplement(int idMenu) throws SQLException {
+        List<Complement> complements = service.getComplementsDisponibles();
+        if (complements.isEmpty()) {
+            System.out.println("❌ Aucun complément disponible.");
+            return;
+        }
+
+        System.out.println("\nCompléments disponibles :");
+        for (Complement c : complements) {
+            System.out.printf("%d. %s | %s | %.2f FCFA%n", c.getId(), c.getNom(), c.getType(), c.getPrix());
+        }
+        System.out.print("ID du complément à ajouter : ");
+
+        int idC;
+        try {
+            idC = scanner.nextInt();
+            scanner.nextLine();
+        } catch (InputMismatchException e) {
+            System.out.println("❌ ID invalide.");
+            scanner.nextLine();
+            return;
+        }
+
+        Complement complementSelectionne = complements.stream()
+            .filter(c -> c.getId() == idC)
+            .findFirst()
+            .orElse(null);
+
+        if (complementSelectionne == null) {
+            System.out.println("❌ Complément invalide ou non disponible !");
+            return;
+        }
+
+      
+        service.ajouterComposition(idMenu, null, idC, 1);
+        System.out.println("✅ Complément ajouté : " + complementSelectionne.getNom() + " au menu " + idMenu);
+    }
+
+
 
 
 }

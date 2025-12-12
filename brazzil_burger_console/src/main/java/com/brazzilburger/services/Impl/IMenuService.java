@@ -19,6 +19,8 @@ public interface IMenuService {
     Menu getMenuById(int id) throws SQLException;
     Menu modifierMenu(Menu menu, String nom, String imagePath) throws SQLException;
     void archiverMenu(int id) throws SQLException;
+    void supprimerComposition(int idComposition) throws SQLException;
+
 
 
 

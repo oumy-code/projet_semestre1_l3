@@ -80,6 +80,10 @@ public class MenuService implements IMenuService {
     public void archiverMenu(int id) throws SQLException {
         menuRepository.archive(id);
     }
+    @Override
+    public void supprimerComposition(int idComposition) throws SQLException {
+        menuRepository.deleteComposition(idComposition);
+    }
 
     
 }
