@@ -161,6 +161,25 @@ public class BurgerView {
         service.archiverBurger(id);
         System.out.println("✅ Burger archivé!");
     }
+    private void desarchiverBurger() throws SQLException {
+        System.out.println("\n--- DÉSARCHIVER UN BURGER ---");
+        listerBurgers(false); 
+        System.out.print("ID à désarchiver: ");
+        
+        int id;
+        try {
+            id = scanner.nextInt();
+            scanner.nextLine();
+        } catch (InputMismatchException e) {
+            System.out.println("❌ ID invalide.");
+            scanner.nextLine();
+            return;
+        }
+
+       
+        service.desarchiverBurger(id);
+        System.out.println("✅ Burger désarchivé!");
+    }
 
 
    
