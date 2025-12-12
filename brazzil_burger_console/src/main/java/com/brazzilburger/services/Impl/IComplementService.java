@@ -19,5 +19,7 @@ public interface IComplementService {
             ComplementType type
     ) throws SQLException;
     void archiverComplement(int id) throws SQLException;
+    void desarchiverComplement(int id) throws SQLException;
+
 
 }

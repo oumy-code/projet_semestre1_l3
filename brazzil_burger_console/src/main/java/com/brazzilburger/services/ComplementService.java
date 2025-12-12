@@ -80,5 +80,9 @@ public class ComplementService implements IComplementService {
      public void archiverComplement(int id) throws SQLException {
         repository.archive(id);
     }
+    @Override
+    public void desarchiverComplement(int id) throws SQLException {
+        repository.unarchive(id);
+    }
 
 }

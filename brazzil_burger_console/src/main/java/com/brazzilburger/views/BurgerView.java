@@ -180,6 +180,7 @@ public class BurgerView {
         service.desarchiverBurger(id);
         System.out.println("✅ Burger désarchivé!");
     }
+    
 
 
    

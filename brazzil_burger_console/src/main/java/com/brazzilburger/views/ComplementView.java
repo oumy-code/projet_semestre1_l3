@@ -50,7 +50,7 @@ public class ComplementView {
                     case 3 -> listerComplements(true);
                     case 4 -> modifierComplement();
                     case 5 -> archiverComplement();
-                    //case 6 -> desarchiverComplement();
+                    case 6 -> desarchiverComplement();
                     case 0 -> { return; }
                     default -> System.out.println("❌ Choix invalide");
                 }
@@ -206,6 +206,24 @@ public class ComplementView {
 
         service.archiverComplement(id);
         System.out.println("✅ Complément archivé!");
+    }
+      private void desarchiverComplement() throws SQLException {
+        System.out.println("\n--- DÉSARCHIVER UN COMPLÉMENT ---");
+        listerComplements(false);
+        System.out.print("ID à désarchiver: ");
+        int id;
+        try {
+            id = scanner.nextInt();
+            scanner.nextLine();
+        } catch (InputMismatchException e) {
+            System.out.println("❌ ID invalide.");
+            scanner.nextLine();
+            return;
+        }
+
+        // Le Service exécute l'action
+        service.desarchiverComplement(id);
+        System.out.println("✅ Complément désarchivé!");
     }
 
 
