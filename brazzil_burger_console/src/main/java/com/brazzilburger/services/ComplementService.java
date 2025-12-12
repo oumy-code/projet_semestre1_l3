@@ -55,5 +55,27 @@ public class ComplementService implements IComplementService {
     public Complement getComplementById(int id) throws SQLException {
         return repository.findById(id);
     }
+     @Override
+    public Complement modifierComplement(
+            Complement complement,
+            String nom,
+            BigDecimal prix,
+            String imagePath,
+            ComplementType type
+    ) throws SQLException {
+
+        if (nom != null && !nom.isEmpty()) complement.setNom(nom);
+        if (prix != null) complement.setPrix(prix);
+        if (type != null) complement.setType(type);
+
+        if (imagePath != null && !imagePath.isEmpty()) {
+            String imageUrl = CloudinaryConfig.uploadImage(imagePath, "complements");
+            if (imageUrl != null) complement.setImage(imageUrl);
+        }
+
+        repository.update(complement);
+
+        return complement;
+    }
 
 }

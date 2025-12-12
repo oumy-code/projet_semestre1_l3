@@ -48,7 +48,7 @@ public class ComplementView {
                     case 1 -> ajouterComplement();
                     case 2 -> listerComplements(false);
                     case 3 -> listerComplements(true);
-                    //case 4 -> modifierComplement();
+                    case 4 -> modifierComplement();
                     //case 5 -> archiverComplement();
                     //case 6 -> desarchiverComplement();
                     case 0 -> { return; }
@@ -130,5 +130,66 @@ public class ComplementView {
             );
         }
     }
+     private void modifierComplement() throws SQLException {
+        System.out.println("\n--- MODIFIER UN COMPLÉMENT ---");
+        listerComplements(false);
+
+        System.out.print("ID du complément à modifier: ");
+        int id;
+        try {
+            id = scanner.nextInt();
+            scanner.nextLine();
+        } catch (InputMismatchException e) {
+            System.out.println("❌ ID invalide.");
+            scanner.nextLine();
+            return;
+        }
+
+        Complement complement = service.getComplementById(id);
+        if (complement == null) {
+            System.out.println("❌ Complément non trouvé");
+            return;
+        }
+
+        System.out.print("Nouveau nom [" + complement.getNom() + "]: ");
+        String nom = scanner.nextLine();
+
+        BigDecimal prix = null;
+        String prixStr;
+        boolean prixValide = false;
+        while (!prixValide) {
+            System.out.print("Nouveau prix [" + complement.getPrix() + "] (ENTER pour garder l'ancien): ");
+            prixStr = scanner.nextLine();
+            if (prixStr.isEmpty()) {
+                prixValide = true;
+            } else {
+                try {
+                    prix = new BigDecimal(prixStr);
+                    prixValide = true;
+                } catch (NumberFormatException e) {
+                    System.out.println("❌ Veuillez entrer un prix valide (nombre).");
+                }
+            }
+        }
+
+        System.out.print("Nouvelle image (ENTER pour garder l'ancienne): ");
+        String image = scanner.nextLine();
+
+        
+        ComplementType type = null;
+        System.out.println("Type actuel : " + complement.getType());
+        System.out.print("Modifier type ? (O/N): ");
+        String rep = scanner.nextLine().trim().toUpperCase();
+
+        if (rep.equals("O")) {
+            type = choisirTypeComplement(); 
+        }
+
+    
+        service.modifierComplement(complement, nom, prix, image, type);
+
+        System.out.println("✅ Complément modifié!");
+    }
+
 
 }

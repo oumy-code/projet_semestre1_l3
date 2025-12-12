@@ -11,5 +11,11 @@ public interface IComplementService {
     Complement creerComplement( String nom, BigDecimal prix,String imagePath,ComplementType type)throws SQLException;
     List<Complement> listerComplements(boolean disponiblesUniquement) throws SQLException;
    Complement getComplementById(int id) throws SQLException;
-
+    Complement modifierComplement(
+            Complement complement,
+            String nom,
+            BigDecimal prix,
+            String imagePath,
+            ComplementType type
+    ) throws SQLException;
 }
