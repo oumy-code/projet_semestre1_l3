@@ -50,7 +50,7 @@ public class BurgerView {
                     case 3 -> listerBurgers(true);
                     case 4 -> modifierBurger();
                     case 5 -> archiverBurger();
-                    //case 6 -> desarchiverBurger();
+                    case 6 -> desarchiverBurger();
                     case 0 -> { return; }
                     default -> System.out.println("❌ Choix invalide");
                 }
