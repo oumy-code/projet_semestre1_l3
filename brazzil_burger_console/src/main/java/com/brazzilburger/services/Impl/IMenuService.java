@@ -16,5 +16,7 @@ public interface IMenuService {
 
     List<Complement> getComplementsDisponibles() throws SQLException;
      List<Menu> listerMenus(boolean disponiblesUniquement) throws SQLException;
+         Menu getMenuById(int id) throws SQLException;
+
 
 }

@@ -62,5 +62,9 @@ public class MenuService implements IMenuService {
     public List<Menu> listerMenus(boolean disponiblesUniquement) throws SQLException {
         return disponiblesUniquement ? menuRepository.findAllNonArchived() : menuRepository.findAll();
     }
+    @Override
+    public Menu getMenuById(int id) throws SQLException {
+        return menuRepository.findById(id);
+    }
     
 }

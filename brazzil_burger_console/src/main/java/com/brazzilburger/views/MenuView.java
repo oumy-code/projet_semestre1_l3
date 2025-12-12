@@ -48,7 +48,7 @@ public class MenuView {
                     case 1 -> creerMenu();
                     case 2 -> listerMenus(false);
                     case 3 -> listerMenus(true);
-                    //case 4 -> voirDetailsMenu();
+                    case 4 -> voirDetailsMenu();
                     //case 5 -> modifierMenu();
                     //case 6 -> gererCompositions();
                     //case 7 -> archiverMenu();
@@ -212,5 +212,32 @@ public class MenuView {
                     m.isArchive() ? "📦 Archivé" : "✅ Disponible");
         }
     }
+    private void voirDetailsMenu() throws SQLException {
+        listerMenus(false);
+        System.out.print("ID du menu: ");
+        int id;
+        try {
+            id = scanner.nextInt();
+            scanner.nextLine();
+        } catch (InputMismatchException e) {
+            System.out.println("❌ ID invalide.");
+            scanner.nextLine();
+            return;
+        }
+
+        Menu menu = service.getMenuById(id); // Appel du service
+        if (menu == null) {
+            System.out.println("❌ Menu non trouvé");
+            return;
+        }
+        // Affichage (Logique View)
+        System.out.println("\n--- Détails du Menu " + menu.getId() + " ---");
+        System.out.println("Nom: " + menu.getNom());
+        System.out.println("Statut: " + (menu.isArchive() ? "Archivé" : "Disponible"));
+        System.out.println("Compositions:");
+        if (menu.getCompositions().isEmpty()) System.out.println("(Aucune)");
+        else menu.getCompositions().forEach(System.out::println);
+    }
+
 
 }
