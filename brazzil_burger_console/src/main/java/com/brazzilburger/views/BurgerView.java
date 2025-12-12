@@ -75,14 +75,13 @@ public class BurgerView {
                 scanner.nextLine();
             } catch (InputMismatchException e) {
                 System.out.println("❌ Veuillez entrer un prix valide (nombre).");
-                scanner.nextLine(); // Consomme l'entrée invalide
+                scanner.nextLine(); 
             }
         }
         
         System.out.print("Chemin image (ENTER pour ignorer): ");
         String image = scanner.nextLine();
 
-        // Appel de la logique métier dans le service
         Burger burger = service.creerBurger(nom, prix, image);
         System.out.println("✅ Burger créé: " + burger.getNom() + " (ID: " + burger.getId() + ")");
     }
