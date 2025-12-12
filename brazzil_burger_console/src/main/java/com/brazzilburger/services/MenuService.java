@@ -66,5 +66,15 @@ public class MenuService implements IMenuService {
     public Menu getMenuById(int id) throws SQLException {
         return menuRepository.findById(id);
     }
+     @Override
+    public Menu modifierMenu(Menu menu, String nom, String imagePath) throws SQLException {
+        if (nom != null && !nom.isEmpty()) menu.setNom(nom);
+        if (imagePath != null && !imagePath.isEmpty()) {
+            String imageUrl = CloudinaryConfig.uploadImage(imagePath, "menus");
+            if (imageUrl != null) menu.setImage(imageUrl);
+        }
+        menuRepository.update(menu);
+        return menu;
+    }
     
 }

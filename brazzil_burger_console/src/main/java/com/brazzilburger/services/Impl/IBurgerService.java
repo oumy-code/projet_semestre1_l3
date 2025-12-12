@@ -15,7 +15,7 @@ public interface IBurgerService {
     Burger modifierBurger(Burger burger, String nom, BigDecimal prix, String imagePath) throws SQLException;
      void archiverBurger(int id) throws SQLException;
     void desarchiverBurger(int id) throws SQLException;
-
+   
 
 
 

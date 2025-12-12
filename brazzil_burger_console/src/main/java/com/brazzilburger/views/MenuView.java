@@ -49,7 +49,7 @@ public class MenuView {
                     case 2 -> listerMenus(false);
                     case 3 -> listerMenus(true);
                     case 4 -> voirDetailsMenu();
-                    //case 5 -> modifierMenu();
+                    case 5 -> modifierMenu();
                     //case 6 -> gererCompositions();
                     //case 7 -> archiverMenu();
                     case 0 -> { return; }
@@ -230,13 +230,40 @@ public class MenuView {
             System.out.println("❌ Menu non trouvé");
             return;
         }
-        // Affichage (Logique View)
+       
         System.out.println("\n--- Détails du Menu " + menu.getId() + " ---");
         System.out.println("Nom: " + menu.getNom());
         System.out.println("Statut: " + (menu.isArchive() ? "Archivé" : "Disponible"));
         System.out.println("Compositions:");
         if (menu.getCompositions().isEmpty()) System.out.println("(Aucune)");
         else menu.getCompositions().forEach(System.out::println);
+    }
+
+     private void modifierMenu() throws SQLException {
+        listerMenus(false);
+        System.out.print("ID du menu à modifier: ");
+        int id;
+        try {
+            id = scanner.nextInt();
+            scanner.nextLine();
+        } catch (InputMismatchException e) {
+            System.out.println("❌ ID invalide.");
+            scanner.nextLine();
+            return;
+        }
+
+        Menu menu = service.getMenuById(id); 
+        if (menu == null) {
+            System.out.println("❌ Menu non trouvé");
+            return;
+        }
+        System.out.print("Nouveau nom [" + menu.getNom() + "]: ");
+        String nom = scanner.nextLine();
+        System.out.print("Nouvelle image (chemin ou ENTER): ");
+        String image = scanner.nextLine();
+        
+        service.modifierMenu(menu, nom, image); 
+        System.out.println("✅ Menu modifié!");
     }
 
 
