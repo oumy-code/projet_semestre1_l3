@@ -77,5 +77,8 @@ public class ComplementService implements IComplementService {
 
         return complement;
     }
+     public void archiverComplement(int id) throws SQLException {
+        repository.archive(id);
+    }
 
 }

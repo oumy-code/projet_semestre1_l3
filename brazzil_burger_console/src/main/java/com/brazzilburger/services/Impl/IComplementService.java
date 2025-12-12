@@ -18,4 +18,6 @@ public interface IComplementService {
             String imagePath,
             ComplementType type
     ) throws SQLException;
+    void archiverComplement(int id) throws SQLException;
+
 }
