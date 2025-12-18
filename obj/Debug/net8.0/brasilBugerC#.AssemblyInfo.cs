@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("brasilBugerC#")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a8c279f50129ce2394104e1ebd8ee6707ed2ef78")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+300f13a243301ba062f5affbf6d39cb3999699f6")]
 [assembly: System.Reflection.AssemblyProductAttribute("brasilBugerC#")]
 [assembly: System.Reflection.AssemblyTitleAttribute("brasilBugerC#")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

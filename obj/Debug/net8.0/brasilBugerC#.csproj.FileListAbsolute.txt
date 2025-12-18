@@ -29,3 +29,9 @@ C:\Users\ndeye oumy ndoye\Desktop\projet_semestre1_l3\brasilBugerC#\brasilBugerC
 C:\Users\ndeye oumy ndoye\Desktop\projet_semestre1_l3\brasilBugerC#\brasilBugerC#\obj\Debug\net8.0\brasilBugerC#.pdb
 C:\Users\ndeye oumy ndoye\Desktop\projet_semestre1_l3\brasilBugerC#\brasilBugerC#\obj\Debug\net8.0\brasilBugerC#.genruntimeconfig.cache
 C:\Users\ndeye oumy ndoye\Desktop\projet_semestre1_l3\brasilBugerC#\brasilBugerC#\obj\Debug\net8.0\ref\brasilBugerC#.dll
+c:\Users\ndeye oumy ndoye\Desktop\projet_semestre1_l3\brasilBugerC#\brasilBugerC#\bin\Debug\net8.0\out\web.config
+c:\Users\ndeye oumy ndoye\Desktop\projet_semestre1_l3\brasilBugerC#\brasilBugerC#\bin\Debug\net8.0\out\appsettings.Development.json
+c:\Users\ndeye oumy ndoye\Desktop\projet_semestre1_l3\brasilBugerC#\brasilBugerC#\bin\Debug\net8.0\out\appsettings.json
+c:\Users\ndeye oumy ndoye\Desktop\projet_semestre1_l3\brasilBugerC#\brasilBugerC#\bin\Debug\net8.0\out\brasilBugerC#.deps.json
+c:\Users\ndeye oumy ndoye\Desktop\projet_semestre1_l3\brasilBugerC#\brasilBugerC#\bin\Debug\net8.0\out\brasilBugerC#.runtimeconfig.json
+c:\Users\ndeye oumy ndoye\Desktop\projet_semestre1_l3\brasilBugerC#\brasilBugerC#\bin\Debug\net8.0\out\global.json
