@@ -1,0 +1,43 @@
+@model brasilBugerC_.Models.ViewModels.CommandeDetailsViewModel
+@{
+    ViewData["Title"] = "Confirmation de la commande";
+}
+
+<div class="container mt-5">
+    <div class="alert alert-success">
+        ✅ Votre commande a été passée avec succès !
+    </div>
+
+    <h2>Détails de la commande</h2>
+
+    <div class="card p-3 mb-3">
+        <p><strong>Numéro de commande :</strong> @Model.Commande.Id</p>
+        <p><strong>Date :</strong> @Model.Commande.DateCommande.ToString("dd/MM/yyyy HH:mm")</p>
+        <p><strong>Type de récupération :</strong> @Model.Commande.TypeRecuperation</p>
+
+        @if (Model.Commande.TypeRecuperation == brasilBugerC_.Models.Enums.TypeRecuperation.Livraison)
+        {
+            <p><strong>Adresse de livraison :</strong> @Model.Commande.AdresseLivraison</p>
+            <p><strong>Zone :</strong> @(Model.Commande.Zone?.Nom ?? "Non spécifiée")</p>
+        }
+
+        <p><strong>Total :</strong> @Model.Commande.MontantTotal.ToString("N0") FCFA</p>
+        
+        @if (Model.Paiement != null)
+        {
+            <p><strong>Mode de paiement :</strong> @Model.Paiement.ModePaiement</p>
+            <p><strong>Statut du paiement :</strong> @Model.Paiement.Statut</p>
+        }
+        else
+        {
+            <p><strong>Statut du paiement :</strong> En attente</p>
+        }
+    </div>
+
+    <a asp-controller="Commande" asp-action="MesCommandes" class="btn btn-primary">
+        Voir toutes mes commandes
+    </a>
+    <a asp-controller="Catalogue" asp-action="Index" class="btn btn-secondary">
+        Retour à l'accueil
+    </a>
+</div>

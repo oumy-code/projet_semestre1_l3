@@ -1,0 +1,12 @@
+namespace brasilBugerC_.Models;
+
+public class User
+{
+    public int Id { get; set; }
+    public string Nom { get; set; } = string.Empty;
+    public string Prenom { get; set; } = string.Empty;
+    public string? Telephone { get; set; }
+    public string? Email { get; set; }
+    public DateTime DateCreation { get; set; }
+}
+

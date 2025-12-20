@@ -1,0 +1,46 @@
+@using brasilBugerC_.Helpers
+@using brasilBugerC_.Services
+@inject SessionHelper SessionHelper
+@inject IPanierService PanierService
+
+@{
+    var client = SessionHelper.GetCurrentClient();
+    var panier = PanierService.GetPanier();
+}
+
+@if (client != null)
+{
+    <li class="nav-item">
+        <a class="nav-link" asp-controller="Commande" asp-action="Panier">
+            🛒 Panier (@panier.NombreArticles)
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" asp-controller="Commande" asp-action="MesCommandes">Mes Commandes</a>
+    </li>
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+            @client.Prenom @client.Nom
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end">
+            <li>
+                <a class="dropdown-item" asp-controller="Account" asp-action="Profile">Mon Profil</a>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            <li>
+                <form asp-controller="Account" asp-action="Logout" method="post">
+                    <button type="submit" class="dropdown-item">Déconnexion</button>
+                </form>
+            </li>
+        </ul>
+    </li>
+}
+else
+{
+    <li class="nav-item">
+        <a class="nav-link" asp-controller="Account" asp-action="Login">Connexion</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" asp-controller="Account" asp-action="Register">Inscription</a>
+    </li>
+}

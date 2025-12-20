@@ -1,0 +1,80 @@
+@model brasilBugerC_.Models.Client
+@{
+    ViewData["Title"] = "Mon Profil";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h2>👤 Mon Profil</h2>
+            </div>
+            <div class="card-body">
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label text-muted">Nom</label>
+                            <p class="fw-bold">@Model.Nom</p>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label text-muted">Prénom</label>
+                            <p class="fw-bold">@Model.Prenom</p>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label text-muted">Login</label>
+                            <p class="fw-bold">@Model.Login</p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label text-muted">Email</label>
+                            <p class="fw-bold">@Model.Email</p>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label text-muted">Téléphone</label>
+                            <p class="fw-bold">@Model.Telephone</p>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label text-muted">Membre depuis</label>
+                            <p class="fw-bold">@Model.DateCreation.ToString("dd/MM/yyyy")</p>
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="d-flex justify-content-between">
+                    <a asp-action="Index" asp-controller="Home" class="btn btn-outline-secondary">
+                        ← Retour à l'accueil
+                    </a>
+                    <a asp-controller="Commande" asp-action="MesCommandes" class="btn btn-primary">
+                        Voir mes commandes
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mt-4">
+            <div class="card-header">
+                <h5>🔐 Sécurité</h5>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info">
+                    <strong>Mot de passe sécurisé</strong><br>
+                    Votre mot de passe est hashé avec BCrypt et stocké en toute sécurité.
+                </div>
+                
+                <form asp-controller="Account" asp-action="Logout" method="post">
+                    <button type="submit" class="btn btn-danger">
+                        🚪 Se déconnecter
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,211 @@
+@model brasilBugerC_.Models.ViewModels.LoginViewModel
+@{
+    ViewData["Title"] = "Connexion";
+    var returnUrl = ViewData["ReturnUrl"] as string;
+}
+
+<style>
+    body {
+        background-color: #f5f5f5;
+    }
+    
+    .login-container {
+        max-width: 450px;
+        margin: 50px auto;
+        padding: 0 20px;
+    }
+    
+    .login-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    
+    .login-logo {
+        font-size: 60px;
+        margin-bottom: 15px;
+    }
+    
+    .login-title {
+        font-size: 28px;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 10px;
+    }
+    
+    .login-subtitle {
+        color: #999;
+        font-size: 14px;
+    }
+    
+    .login-card {
+        background: #fff;
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .form-label {
+        display: block;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 8px;
+        font-size: 14px;
+    }
+    
+    .form-control {
+        width: 100%;
+        padding: 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 12px;
+        font-size: 16px;
+        transition: all 0.3s;
+    }
+    
+    .form-control:focus {
+        outline: none;
+        border-color: #FFD700;
+        box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.1);
+    }
+    
+    .error-message {
+        color: #dc3545;
+        font-size: 13px;
+        margin-top: 5px;
+    }
+    
+    .btn-login {
+        background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+        color: #fff;
+        border: none;
+        padding: 16px;
+        border-radius: 12px;
+        font-weight: bold;
+        font-size: 16px;
+        width: 100%;
+        transition: all 0.3s;
+        box-shadow: 0 4px 12px rgba(255, 165, 0, 0.3);
+        cursor: pointer;
+        margin-top: 10px;
+    }
+    
+    .btn-login:hover {
+        background: linear-gradient(135deg, #FFA500 0%, #FF8C00 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(255, 165, 0, 0.4);
+    }
+    
+    .divider {
+        text-align: center;
+        margin: 25px 0;
+        position: relative;
+    }
+    
+    .divider::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 50%;
+        width: 100%;
+        height: 1px;
+        background: #e0e0e0;
+    }
+    
+    .divider span {
+        background: #fff;
+        padding: 0 15px;
+        position: relative;
+        color: #999;
+        font-size: 14px;
+    }
+    
+    .register-link {
+        text-align: center;
+        color: #666;
+        font-size: 14px;
+    }
+    
+    .register-link a {
+        color: #FFA500;
+        font-weight: 600;
+        text-decoration: none;
+    }
+    
+    .register-link a:hover {
+        color: #FFD700;
+        text-decoration: underline;
+    }
+    
+    .alert {
+        padding: 15px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+    }
+    
+    .alert-danger {
+        background: #ffe6e6;
+        color: #dc3545;
+        border: 1px solid #ffcccc;
+    }
+    
+    .alert-info {
+        background: #e6f3ff;
+        color: #0066cc;
+        border: 1px solid #cce5ff;
+    }
+</style>
+
+<div class="login-container">
+    <div class="login-header">
+        <div class="login-logo">🍔</div>
+        <h1 class="login-title">BRASIL BURGER</h1>
+        <p class="login-subtitle">Connectez-vous pour continuer</p>
+    </div>
+    
+    <div class="login-card">
+        @if (!string.IsNullOrEmpty(returnUrl))
+        {
+            <div class="alert alert-info">
+                Veuillez vous connecter pour finaliser votre commande
+            </div>
+        }
+        
+        <form asp-action="Login" method="post">
+            <input type="hidden" name="returnUrl" value="@returnUrl" />
+            
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+            
+            <div class="form-group">
+                <label asp-for="Login" class="form-label">Login</label>
+                <input asp-for="Login" class="form-control" placeholder="Entrez votre login" autofocus />
+                <span asp-validation-for="Login" class="error-message"></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="MotDePasse" class="form-label">Mot de passe</label>
+                <input asp-for="MotDePasse" type="password" class="form-control" placeholder="Entrez votre mot de passe" />
+                <span asp-validation-for="MotDePasse" class="error-message"></span>
+            </div>
+            
+            <button type="submit" class="btn-login">
+                Se connecter
+            </button>
+        </form>
+        
+        <div class="divider">
+            <span>ou</span>
+        </div>
+        
+        <p class="register-link">
+            Vous n'avez pas de compte ? 
+            <a asp-action="Register" asp-route-returnUrl="@returnUrl">Inscrivez-vous</a>
+        </p>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,192 @@
+@model brasilBugerC_.Models.ViewModels.CommandeDetailsViewModel
+@{
+    ViewData["Title"] = $"Commande #{Model.Commande?.Id}";
+}
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0">Commande #@Model.Commande?.Id</h4>
+                    @switch (Model.Commande?.Etat)
+                    {
+                        case brasilBugerC_.Models.Enums.EtatCommande.EnCours:
+                            <span class="badge bg-warning fs-6">⏳ En cours</span>
+                            break;
+                        case brasilBugerC_.Models.Enums.EtatCommande.Termine:
+                            <span class="badge bg-success fs-6">✓ Terminé</span>
+                            break;
+                        case brasilBugerC_.Models.Enums.EtatCommande.Annule:
+                            <span class="badge bg-danger fs-6">✕ Annulé</span>
+                            break;
+                    }
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <p><strong>Date :</strong> @Model.Commande?.DateCommande.ToString("dd/MM/yyyy HH:mm")</p>
+                        <p><strong>Dernière modification :</strong> @Model.Commande?.DateModification.ToString("dd/MM/yyyy HH:mm")</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Type :</strong>
+                            @switch (Model.Commande?.TypeRecuperation)
+                            {
+                                case brasilBugerC_.Models.Enums.TypeRecuperation.SurPlace:
+                                    <span class="badge bg-info">🏪 Sur place</span>
+                                    break;
+                                case brasilBugerC_.Models.Enums.TypeRecuperation.ARecuperer:
+                                    <span class="badge bg-warning">🏃 À récupérer</span>
+                                    break;
+                                case brasilBugerC_.Models.Enums.TypeRecuperation.Livraison:
+                                    <span class="badge bg-primary">🚚 Livraison</span>
+                                    break;
+                            }
+                        </p>
+                        @if (Model.Commande?.TypeRecuperation == brasilBugerC_.Models.Enums.TypeRecuperation.Livraison)
+                        {
+                            <p><strong>Zone :</strong> @Model.Commande.Zone?.Nom</p>
+                            <p><strong>Adresse :</strong> @Model.Commande.AdresseLivraison</p>
+                        }
+                    </div>
+                </div>
+
+                <hr>
+
+                <h5>Articles commandés</h5>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Article</th>
+                            <th>Quantité</th>
+                            <th>Prix unitaire</th>
+                            <th>Sous-total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Commande?.LignesCommande != null)
+                        {
+                            foreach (var ligne in Model.Commande.LignesCommande)
+                            {
+                                <tr>
+                                    <td>
+                                        @if (ligne.Burger != null)
+                                        {
+                                            <span>🍔 @ligne.Burger.Nom</span>
+                                        }
+                                        else if (ligne.Menu != null)
+                                        {
+                                            <span>🍽️ @ligne.Menu.Nom</span>
+                                        }
+                                        else if (ligne.Complement != null)
+                                        {
+                                            <span>
+                                                @if (ligne.Complement.Type == brasilBugerC_.Models.Enums.ComplementType.FRITES)
+                                                {
+                                                    <text>🍟</text>
+                                                }
+                                                else
+                                                {
+                                                    <text>🥤</text>
+                                                }
+                                                @ligne.Complement.Nom
+                                            </span>
+                                        }
+                                    </td>
+                                    <td>@ligne.Quantite</td>
+                                    <td>@ligne.PrixUnitaire.ToString("N0") FCFA</td>
+                                    <td>@ligne.SousTotal.ToString("N0") FCFA</td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th colspan="3" class="text-end">Total :</th>
+                            <th>@Model.Commande?.MontantTotal.ToString("N0") FCFA</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">💳 Paiement</h5>
+            </div>
+            <div class="card-body">
+                @if (Model.Paiement != null)
+                {
+                    <p><strong>Mode :</strong> 
+                        @if (Model.Paiement.ModePaiement == brasilBugerC_.Models.Enums.ModePaiement.Wave)
+                        {
+                            <span class="badge bg-primary">Wave</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-warning">Orange Money</span>
+                        }
+                    </p>
+                    <p><strong>Montant :</strong> @Model.Paiement.Montant.ToString("N0") FCFA</p>
+                    <p><strong>Date :</strong> @Model.Paiement.DatePaiement.ToString("dd/MM/yyyy HH:mm")</p>
+                    <p><strong>Statut :</strong>
+                        @switch (Model.Paiement.Statut)
+                        {
+                            case brasilBugerC_.Models.Enums.StatutPaiement.EnAttente:
+                                <span class="badge bg-warning">⏳ En attente</span>
+                                break;
+                            case brasilBugerC_.Models.Enums.StatutPaiement.Confirme:
+                                <span class="badge bg-success">✓ Confirmé</span>
+                                break;
+                            case brasilBugerC_.Models.Enums.StatutPaiement.Refuse:
+                                <span class="badge bg-danger">✕ Refusé</span>
+                                break;
+                        }
+                    </p>
+                }
+                else
+                {
+                    <div class="alert alert-warning">
+                        Aucune information de paiement disponible.
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="card mt-3">
+            <div class="card-header">
+                <h5 class="mb-0">📊 Statut</h5>
+            </div>
+            <div class="card-body">
+                @if (Model.Commande?.Etat == brasilBugerC_.Models.Enums.EtatCommande.EnCours)
+                {
+                    <div class="alert alert-info">
+                        <strong>En préparation</strong><br>
+                        Votre commande est en cours de préparation.
+                    </div>
+                }
+                else if (Model.Commande?.Etat == brasilBugerC_.Models.Enums.EtatCommande.Termine)
+                {
+                    <div class="alert alert-success">
+                        <strong>Terminé</strong><br>
+                        Votre commande a été livrée ou est prête à être récupérée.
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-danger">
+                        <strong>Annulé</strong><br>
+                        Cette commande a été annulée.
+                    </div>
+                }
+            </div>
+        </div>
+
+        <a asp-action="MesCommandes" class="btn btn-primary w-100 mt-3">
+            ← Retour à mes commandes
+        </a>
+    </div>
+</div>

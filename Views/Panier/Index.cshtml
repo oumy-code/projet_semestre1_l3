@@ -1,0 +1,430 @@
+@model brasilBugerC_.Models.ViewModels.PanierViewModel
+@{
+    ViewData["Title"] = "Mon Panier";
+}
+
+<style>
+    body {
+        background-color: #f5f5f5;
+    }
+    
+    .header-section {
+        background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+        padding: 20px;
+        margin: -20px -20px 20px -20px;
+        border-radius: 0 0 20px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .header-section h1 {
+        color: #fff;
+        font-size: 20px;
+        font-weight: bold;
+        margin: 0;
+    }
+    
+    .header-icons {
+        display: flex;
+        gap: 15px;
+    }
+    
+    .header-icon {
+        color: #fff;
+        font-size: 24px;
+        cursor: pointer;
+    }
+    
+    .panier-container {
+        background: #fff;
+        border-radius: 20px;
+        padding: 25px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        margin-bottom: 20px;
+    }
+    
+    .panier-title {
+        font-size: 18px;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 20px;
+    }
+    
+    .panier-items {
+        margin-bottom: 25px;
+    }
+    
+    .panier-item {
+        display: flex;
+        gap: 15px;
+        padding: 15px;
+        background: #f8f9fa;
+        border-radius: 12px;
+        margin-bottom: 12px;
+        transition: all 0.3s;
+    }
+    
+    .panier-item:hover {
+        background: #f0f0f0;
+    }
+    
+    .item-image {
+        width: 70px;
+        height: 70px;
+        object-fit: cover;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 32px;
+        flex-shrink: 0;
+    }
+    
+    .item-details {
+        flex: 1;
+    }
+    
+    .item-name {
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 5px;
+        font-size: 16px;
+    }
+    
+    .item-type {
+        font-size: 12px;
+        color: #999;
+        margin-bottom: 8px;
+    }
+    
+    .item-price-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .item-unit-price {
+        color: #666;
+        font-size: 14px;
+    }
+    
+    .item-quantity {
+        color: #666;
+        font-size: 14px;
+        background: #fff;
+        padding: 4px 10px;
+        border-radius: 8px;
+    }
+    
+    .item-subtotal {
+        color: #FFD700;
+        font-weight: bold;
+        font-size: 16px;
+    }
+    
+    .total-section {
+        border-top: 2px solid #e0e0e0;
+        padding-top: 20px;
+        margin-bottom: 25px;
+    }
+    
+    .total-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+    
+    .total-label {
+        font-size: 18px;
+        font-weight: bold;
+        color: #333;
+    }
+    
+    .total-amount {
+        font-size: 22px;
+        font-weight: bold;
+        color: #FFD700;
+    }
+    
+    .recuperation-section {
+        margin-bottom: 25px;
+    }
+    
+    .recuperation-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 15px;
+    }
+    
+    .recuperation-options {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .recuperation-option {
+        display: flex;
+        align-items: center;
+        padding: 15px;
+        background: #f8f9fa;
+        border-radius: 12px;
+        border: 2px solid #e0e0e0;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+    
+    .recuperation-option:hover {
+        border-color: #FFD700;
+        background: #fffef8;
+    }
+    
+    .recuperation-option input[type="radio"] {
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+        accent-color: #FFD700;
+        margin-right: 12px;
+    }
+    
+    .recuperation-option label {
+        cursor: pointer;
+        font-weight: 500;
+        color: #333;
+        margin: 0;
+        flex: 1;
+    }
+    
+    .btn-checkout {
+        background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+        color: #fff;
+        border: none;
+        padding: 18px;
+        border-radius: 15px;
+        font-weight: bold;
+        font-size: 18px;
+        width: 100%;
+        transition: all 0.3s;
+        box-shadow: 0 4px 12px rgba(255, 165, 0, 0.3);
+        text-align: center;
+        text-decoration: none;
+        display: block;
+    }
+    
+    .btn-checkout:hover {
+        background: linear-gradient(135deg, #FFA500 0%, #FF8C00 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(255, 165, 0, 0.4);
+        color: #fff;
+    }
+    
+    .btn-clear {
+        background: #fff;
+        color: #dc3545;
+        border: 2px solid #dc3545;
+        padding: 12px;
+        border-radius: 12px;
+        font-weight: 600;
+        width: 100%;
+        transition: all 0.3s;
+        margin-bottom: 15px;
+    }
+    
+    .btn-clear:hover {
+        background: #dc3545;
+        color: #fff;
+    }
+    
+    .empty-cart {
+        text-align: center;
+        padding: 60px 20px;
+        color: #999;
+    }
+    
+    .empty-cart-icon {
+        font-size: 80px;
+        margin-bottom: 20px;
+    }
+    
+    .empty-cart-text {
+        font-size: 18px;
+        margin-bottom: 25px;
+    }
+    
+    .btn-continue {
+        background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+        color: #fff;
+        border: none;
+        padding: 15px 30px;
+        border-radius: 12px;
+        font-weight: bold;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.3s;
+    }
+    
+    .btn-continue:hover {
+        background: linear-gradient(135deg, #FFA500 0%, #FF8C00 100%);
+        transform: translateY(-2px);
+        color: #fff;
+    }
+    
+    .bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: #fff;
+        border-top: 1px solid #e0e0e0;
+        display: flex;
+        justify-content: space-around;
+        padding: 12px 0;
+        box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .nav-item {
+        text-align: center;
+        color: #999;
+        text-decoration: none;
+        flex: 1;
+        padding: 5px;
+        transition: all 0.3s;
+    }
+    
+    .nav-item:hover,
+    .nav-item.active {
+        color: #FFD700;
+    }
+    
+    .nav-item-icon {
+        font-size: 24px;
+        display: block;
+        margin-bottom: 3px;
+    }
+    
+    .nav-item-label {
+        font-size: 11px;
+        font-weight: 500;
+    }
+    
+    @@media (max-width: 768px) {
+        .panier-container {
+            padding: 20px 15px;
+            margin-bottom: 80px;
+        }
+        
+        .item-image {
+            width: 60px;
+            height: 60px;
+            font-size: 28px;
+        }
+    }
+</style>
+
+<div class="header-section">
+    <h1>BRASIL BURGER</h1>
+    <div class="header-icons">
+        <span class="header-icon">🛒</span>
+        <span class="header-icon">👤</span>
+    </div>
+</div>
+
+<div class="panier-container">
+    <h2 class="panier-title">Mon Panier</h2>
+    
+    @if (!Model.Items.Any())
+    {
+        <div class="empty-cart">
+            <div class="empty-cart-icon">🛒</div>
+            <div class="empty-cart-text">Votre panier est vide</div>
+            <a asp-controller="Catalogue" asp-action="Index" class="btn-continue">
+                Continuer mes achats
+            </a>
+        </div>
+    }
+    else
+    {
+        <div class="panier-items">
+            @foreach (var item in Model.Items)
+            {
+                <div class="panier-item">
+                    <div class="item-image">
+                        @if (item.Type == "Burger")
+                        {
+                            <span>🍔</span>
+                        }
+                        else if (item.Type == "Menu")
+                        {
+                            <span>🍽️</span>
+                        }
+                        else
+                        {
+                            <span>🍴</span>
+                        }
+                    </div>
+                    <div class="item-details">
+                        <div class="item-name">@item.Nom</div>
+                        <div class="item-type">@item.Type</div>
+                        <div class="item-price-info">
+                            <span class="item-unit-price">@item.PrixUnitaire.ToString("N0") FCFA × @item.Quantite</span>
+                            <span class="item-subtotal">@item.SousTotal.ToString("N0") FCFA</span>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        
+        <div class="total-section">
+            <div class="total-row">
+                <span class="total-label">Total</span>
+                <span class="total-amount">@Model.Total.ToString("N0") FCFA</span>
+            </div>
+        </div>
+        
+        <div class="recuperation-section">
+            <div class="recuperation-title">Mode de Récupération</div>
+            <div class="recuperation-options">
+                <div class="recuperation-option">
+                    <input type="radio" name="modeRecuperation" value="surplace" id="surplace" checked>
+                    <label for="surplace">Sur place</label>
+                </div>
+                <div class="recuperation-option">
+                    <input type="radio" name="modeRecuperation" value="emporter" id="emporter">
+                    <label for="emporter">À emporter</label>
+                </div>
+                <div class="recuperation-option">
+                    <input type="radio" name="modeRecuperation" value="livraison" id="livraison">
+                    <label for="livraison">Sur Livraison</label>
+                </div>
+            </div>
+        </div>
+        
+       <a asp-controller="Commande" asp-action="Checkout" class="btn-checkout">
+    Procéder au paiement
+</a>
+
+        <form asp-action="Clear" method="post" class="mt-3">
+            <button type="submit" class="btn-clear">
+                🗑️ Vider le panier
+            </button>
+        </form>
+    }
+</div>
+
+<div class="bottom-nav">
+    <a asp-controller="Catalogue" asp-action="Index" class="nav-item">
+        <span class="nav-item-icon">🏠</span>
+        <span class="nav-item-label">Accueil</span>
+    </a>
+    <a asp-controller="Panier" asp-action="Index" class="nav-item active">
+        <span class="nav-item-icon">🛒</span>
+        <span class="nav-item-label">Panier</span>
+    </a>
+    <a asp-controller="Commande" asp-action="MesCommandes" class="nav-item">
+        <span class="nav-item-icon">📦</span>
+        <span class="nav-item-label">Commandes</span>
+    </a>
+</div>

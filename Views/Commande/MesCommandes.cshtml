@@ -1,0 +1,79 @@
+@model brasilBugerC_.Models.ViewModels.CommandeViewModel
+@{
+    ViewData["Title"] = "Mes Commandes";
+}
+
+<div class="container mt-5">
+    <h1 class="mb-4">📦 Mes Commandes</h1>
+
+    @if (Model.Commandes.Any())
+    {
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>N° Commande</th>
+                        <th>Date</th>
+                        <th>Montant</th>
+                        <th>Type</th>
+                        <th>État</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var commande in Model.Commandes)
+                    {
+                        <tr>
+                            <td><strong>#@commande.Id</strong></td>
+                            <td>@commande.DateCommande.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td><strong>@commande.MontantTotal.ToString("N0") FCFA</strong></td>
+                            <td>
+                                @switch (commande.TypeRecuperation)
+                                {
+                                    case brasilBugerC_.Models.Enums.TypeRecuperation.SurPlace:
+                                        <span class="badge bg-info text-dark">🏪 Sur place</span>
+                                        break;
+                                    case brasilBugerC_.Models.Enums.TypeRecuperation.ARecuperer:
+                                        <span class="badge bg-warning text-dark">🏃 À récupérer</span>
+                                        break;
+                                    case brasilBugerC_.Models.Enums.TypeRecuperation.Livraison:
+                                        <span class="badge bg-primary">🚚 Livraison</span>
+                                        break;
+                                }
+                            </td>
+                            <td>
+                                @switch (commande.Etat)
+                                {
+                                    case brasilBugerC_.Models.Enums.EtatCommande.EnCours:
+                                        <span class="badge bg-warning text-dark">⏳ En cours</span>
+                                        break;
+                                    case brasilBugerC_.Models.Enums.EtatCommande.Termine:
+                                        <span class="badge bg-success">✓ Terminé</span>
+                                        break;
+                                    case brasilBugerC_.Models.Enums.EtatCommande.Annule:
+                                        <span class="badge bg-danger">✕ Annulé</span>
+                                        break;
+                                }
+                            </td>
+                            <td>
+                                <a asp-action="Details" asp-route-id="@commande.Id" class="btn btn-sm btn-primary">
+                                    Voir détails
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info text-center">
+            <h4>Vous n'avez pas encore de commandes</h4>
+            <p>Découvrez notre catalogue et passez votre première commande.</p>
+            <a asp-controller="Catalogue" asp-action="Index" class="btn btn-primary">
+                Voir le catalogue
+            </a>
+        </div>
+    }
+</div>

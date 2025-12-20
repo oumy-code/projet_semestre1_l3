@@ -1,0 +1,296 @@
+@model brasilBugerC_.Models.ViewModels.CatalogueViewModel
+@{
+    ViewData["Title"] = "Catalogue";
+}
+
+<style>
+    body {
+        background-color: #f5f5f5;
+    }
+    
+    .header-section {
+        background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+        padding: 20px;
+        margin: -20px -20px 20px -20px;
+        border-radius: 0 0 20px 20px;
+    }
+    
+    .header-section h1 {
+        color: #fff;
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+    
+    .header-section p {
+        color: #fff;
+        font-size: 14px;
+        margin: 0;
+    }
+    
+    .filter-buttons {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 25px;
+        background: #fff;
+        padding: 15px;
+        border-radius: 15px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    .filter-btn {
+        flex: 1;
+        padding: 12px;
+        border: none;
+        border-radius: 10px;
+        background: #f0f0f0;
+        color: #666;
+        font-weight: 600;
+        text-decoration: none;
+        text-align: center;
+        transition: all 0.3s;
+    }
+    
+    .filter-btn:hover {
+        background: #e0e0e0;
+        color: #333;
+    }
+    
+    .filter-btn.active {
+        background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+        color: #fff;
+    }
+    
+    .section-title {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 15px;
+        color: #333;
+    }
+    
+    .product-card {
+        background: #fff;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        transition: transform 0.3s, box-shadow 0.3s;
+        height: 100%;
+    }
+    
+    .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+    
+    .product-image {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+        background: #f8f8f8;
+    }
+    
+    .product-placeholder {
+        width: 100%;
+        height: 180px;
+        background: linear-gradient(135deg, #FFD700 20%, #FFA500 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .product-placeholder span {
+        font-size: 60px;
+    }
+    
+    .product-body {
+        padding: 15px;
+    }
+    
+    .product-title {
+        font-size: 16px;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 8px;
+    }
+    
+    .product-description {
+        font-size: 12px;
+        color: #888;
+        margin-bottom: 10px;
+        line-height: 1.4;
+    }
+    
+    .product-composition {
+        font-size: 11px;
+        color: #666;
+        margin-bottom: 12px;
+    }
+    
+    .product-composition ul {
+        margin: 5px 0 0 0;
+        padding-left: 20px;
+    }
+    
+    .product-composition li {
+        margin-bottom: 2px;
+    }
+    
+    .product-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 10px;
+        border-top: 1px solid #f0f0f0;
+    }
+    
+    .product-price {
+        font-size: 18px;
+        font-weight: bold;
+        color: #FFD700;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+    
+    .product-price::after {
+        content: '⚡';
+        font-size: 20px;
+    }
+    
+    .btn-order {
+        background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 25px;
+        font-weight: bold;
+        font-size: 14px;
+        text-decoration: none;
+        transition: all 0.3s;
+        display: inline-block;
+    }
+    
+    .btn-order:hover {
+        background: linear-gradient(135deg, #FFA500 0%, #FF8C00 100%);
+        color: #fff;
+        transform: scale(1.05);
+    }
+    
+    .no-products {
+        background: #fff;
+        padding: 40px;
+        border-radius: 20px;
+        text-align: center;
+        color: #888;
+    }
+</style>
+
+<div class="header-section">
+    <h1>BRASIL BURGER DB</h1>
+    <p>Les meilleurs burgers de Dakar</p>
+</div>
+
+<div class="filter-buttons">
+    <a asp-action="Index" class="filter-btn @(Model.Filtre == null ? "active" : "")">
+        Tout
+    </a>
+    <a asp-action="Index" asp-route-filtre="burger" class="filter-btn @(Model.Filtre == "burger" ? "active" : "")">
+        🍔 Burgers
+    </a>
+    <a asp-action="Index" asp-route-filtre="menu" class="filter-btn @(Model.Filtre == "menu" ? "active" : "")">
+        🍽️ Menus
+    </a>
+</div>
+
+@if (Model.Burgers.Any() && (Model.Filtre == null || Model.Filtre == "burger"))
+{
+    <section class="mb-5">
+        <h2 class="section-title">🍔 Burgers</h2>
+        <div class="row">
+            @foreach (var burger in Model.Burgers)
+            {
+                <div class="col-md-4 col-sm-6 mb-4">
+                    <div class="product-card">
+                        @if (!string.IsNullOrEmpty(burger.Image))
+                        {
+                            <img src="@burger.Image" class="product-image" alt="@burger.Nom">
+                        }
+                        else
+                        {
+                            <div class="product-placeholder">
+                                <span>🍔</span>
+                            </div>
+                        }
+                        <div class="product-body">
+                            <h5 class="product-title">@burger.Nom</h5>
+                            <div class="product-footer">
+                                <div class="product-price">@burger.Prix.ToString("N0") FCFA</div>
+                                <a asp-action="BurgerDetails" asp-route-id="@burger.Id" class="btn-order">
+                                    commander
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </section>
+}
+
+@if (Model.Menus.Any() && (Model.Filtre == null || Model.Filtre == "menu"))
+{
+    <section>
+        <h2 class="section-title">🍽️ Menus</h2>
+        <div class="row">
+            @foreach (var menu in Model.Menus)
+            {
+                <div class="col-md-4 col-sm-6 mb-4">
+                    <div class="product-card">
+                        @if (!string.IsNullOrEmpty(menu.Image))
+                        {
+                            <img src="@menu.Image" class="product-image" alt="@menu.Nom">
+                        }
+                        else
+                        {
+                            <div class="product-placeholder">
+                                <span>🍽️</span>
+                            </div>
+                        }
+                        <div class="product-body">
+                            <h5 class="product-title">@menu.Nom</h5>
+                            <div class="product-composition">
+                                <strong>Composition :</strong>
+                                <ul>
+                                    @foreach (var comp in menu.Compositions)
+                                    {
+                                        @if (comp.Burger != null)
+                                        {
+                                            <li>@comp.Quantite x @comp.Burger.Nom</li>
+                                        }
+                                        else if (comp.Complement != null)
+                                        {
+                                            <li>@comp.Quantite x @comp.Complement.Nom</li>
+                                        }
+                                    }
+                                </ul>
+                            </div>
+                            <div class="product-footer">
+                                <div class="product-price">@menu.Prix.ToString("N0") FCFA</div>
+                                <a asp-action="MenuDetails" asp-route-id="@menu.Id" class="btn-order">
+                                    Commander
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </section>
+}
+
+@if (!Model.Burgers.Any() && !Model.Menus.Any())
+{
+    <div class="no-products">
+        <p>Aucun produit disponible pour le moment.</p>
+    </div>
+}

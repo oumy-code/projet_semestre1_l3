@@ -1,0 +1,334 @@
+@model brasilBugerC_.Models.ViewModels.ProductDetailsViewModel
+@{
+    ViewData["Title"] = Model.Menu?.Nom ?? "Détails du menu";
+}
+
+<style>
+    body {
+        background-color: #f5f5f5;
+    }
+    
+    .details-container {
+        background: #fff;
+        border-radius: 25px;
+        overflow: hidden;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        margin-bottom: 30px;
+    }
+    
+    .product-image-section {
+        padding: 30px;
+        background: linear-gradient(135deg, #FFF9E6 0%, #FFE6B3 100%);
+    }
+    
+    .product-image {
+        width: 100%;
+        height: 400px;
+        object-fit: cover;
+        border-radius: 20px;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    }
+    
+    .product-placeholder {
+        width: 100%;
+        height: 400px;
+        background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    }
+    
+    .product-placeholder span {
+        font-size: 140px;
+        filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+    }
+    
+    .composition-card {
+        background: #f8f9fa;
+        border-radius: 15px;
+        padding: 20px;
+        margin-top: 25px;
+    }
+    
+    .composition-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .composition-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    
+    .composition-item {
+        background: #fff;
+        padding: 15px;
+        border-radius: 12px;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border: 2px solid #e0e0e0;
+        transition: all 0.3s;
+    }
+    
+    .composition-item:hover {
+        border-color: #FFD700;
+        background: #fffef8;
+    }
+    
+    .composition-item-info {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 500;
+        color: #333;
+    }
+    
+    .composition-item-emoji {
+        font-size: 24px;
+    }
+    
+    .composition-item-price {
+        color: #999;
+        font-size: 14px;
+        font-weight: 600;
+    }
+    
+    .product-info-section {
+        padding: 40px 35px;
+    }
+    
+    .product-name {
+        font-size: 32px;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 15px;
+    }
+    
+    .product-price {
+        font-size: 28px;
+        font-weight: bold;
+        color: #FFD700;
+        margin-bottom: 25px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .product-price::before {
+        content: '⚡';
+        font-size: 32px;
+    }
+    
+    .savings-badge {
+        background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+        color: #fff;
+        padding: 20px;
+        border-radius: 15px;
+        margin-bottom: 25px;
+        box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+    }
+    
+    .savings-badge-title {
+        font-weight: bold;
+        font-size: 18px;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .savings-badge-text {
+        font-size: 14px;
+        opacity: 0.95;
+    }
+    
+    .form-section {
+        background: #f8f9fa;
+        padding: 25px;
+        border-radius: 15px;
+        margin-bottom: 20px;
+    }
+    
+    .form-label {
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 12px;
+        font-size: 16px;
+    }
+    
+    .quantity-input {
+        width: 120px;
+        padding: 12px;
+        border: 2px solid #e0e0e0;
+        border-radius: 12px;
+        font-size: 16px;
+        font-weight: 600;
+        text-align: center;
+        transition: border-color 0.3s;
+    }
+    
+    .quantity-input:focus {
+        border-color: #FFD700;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.1);
+    }
+    
+    .btn-add-cart {
+        background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+        color: #fff;
+        border: none;
+        padding: 18px;
+        border-radius: 15px;
+        font-weight: bold;
+        font-size: 18px;
+        width: 100%;
+        transition: all 0.3s;
+        box-shadow: 0 4px 12px rgba(255, 165, 0, 0.3);
+    }
+    
+    .btn-add-cart:hover {
+        background: linear-gradient(135deg, #FFA500 0%, #FF8C00 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(255, 165, 0, 0.4);
+        color: #fff;
+    }
+    
+    .btn-back {
+        background: #fff;
+        color: #666;
+        border: 2px solid #e0e0e0;
+        padding: 12px 24px;
+        border-radius: 12px;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.3s;
+    }
+    
+    .btn-back:hover {
+        border-color: #FFD700;
+        color: #FFD700;
+        background: #fffef8;
+    }
+    
+    @@media (max-width: 768px) {
+        .product-name {
+            font-size: 24px;
+        }
+        
+        .product-price {
+            font-size: 22px;
+        }
+        
+        .product-info-section,
+        .product-image-section {
+            padding: 25px 20px;
+        }
+    }
+</style>
+
+<div class="details-container">
+    <div class="row g-0">
+        <div class="col-md-6 product-image-section">
+            @if (!string.IsNullOrEmpty(Model.Menu?.Image))
+            {
+                <img src="@Model.Menu.Image" class="product-image" alt="@Model.Menu.Nom">
+            }
+            else
+            {
+                <div class="product-placeholder">
+                    <span>🍽️</span>
+                </div>
+            }
+
+            <div class="composition-card">
+                <div class="composition-title">
+                    📋 Composition du menu
+                </div>
+                <ul class="composition-list">
+                    @if (Model.Menu?.Compositions != null)
+                    {
+                        foreach (var comp in Model.Menu.Compositions)
+                        {
+                            <li class="composition-item">
+                                <div class="composition-item-info">
+                                    @if (comp.Burger != null)
+                                    {
+                                        <span class="composition-item-emoji">🍔</span>
+                                        <span>@comp.Quantite x @comp.Burger.Nom</span>
+                                    }
+                                    else if (comp.Complement != null)
+                                    {
+                                        @if (comp.Complement.Type == brasilBugerC_.Models.Enums.ComplementType.FRITES)
+                                        {
+                                            <span class="composition-item-emoji">🍟</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="composition-item-emoji">🥤</span>
+                                        }
+                                        <span>@comp.Quantite x @comp.Complement.Nom</span>
+                                    }
+                                </div>
+                                <div class="composition-item-price">
+                                    @if (comp.Burger != null)
+                                    {
+                                        @comp.Burger.Prix.ToString("N0") 
+                                    }
+                                    else if (comp.Complement != null)
+                                    {
+                                        @comp.Complement.Prix.ToString("N0")
+                                    }
+                                    FCFA
+                                </div>
+                            </li>
+                        }
+                    }
+                </ul>
+            </div>
+        </div>
+        
+        <div class="col-md-6 product-info-section">
+            <h1 class="product-name">@Model.Menu?.Nom</h1>
+            <div class="product-price">@Model.Menu?.Prix.ToString("N0") FCFA</div>
+            
+            <div class="savings-badge">
+                <div class="savings-badge-title">
+                    💰 Économisez avec ce menu !
+                </div>
+                <div class="savings-badge-text">
+                    Ce menu complet est plus avantageux que l'achat séparé des articles.
+                </div>
+            </div>
+            
+            <form asp-action="AddMenuToPanier" method="post">
+                <input type="hidden" name="id" value="@Model.Menu?.Id" />
+                
+                <div class="form-section">
+                    <label class="form-label">Quantité</label>
+                    <input type="number" name="quantite" value="1" min="1" max="10" class="quantity-input">
+                </div>
+                
+                <button type="submit" class="btn-add-cart">
+                    🛒 Ajouter au panier
+                </button>
+            </form>
+            
+            <div class="mt-3">
+                <a asp-action="Index" class="btn-back">
+                    ← Retour au catalogue
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

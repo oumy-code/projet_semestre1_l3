@@ -1,0 +1,74 @@
+@model brasilBugerC_.Models.ViewModels.RegisterViewModel
+
+@{
+    ViewData["Title"] = "Inscription";
+}
+
+<h2 class="mb-4">Inscription</h2>
+
+@* Affiche les erreurs globales *@
+@if (!ViewData.ModelState.IsValid && ViewData.ModelState.Values.SelectMany(v => v.Errors).Any())
+{
+    <div class="alert alert-danger">
+        <ul>
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <li>@error.ErrorMessage</li>
+            }
+        </ul>
+    </div>
+}
+
+<form asp-action="Register" method="post" class="mt-3">
+    <div class="mb-3">
+        <label asp-for="Nom" class="form-label"></label>
+        <input asp-for="Nom" class="form-control" />
+        <span asp-validation-for="Nom" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Prenom" class="form-label"></label>
+        <input asp-for="Prenom" class="form-control" />
+        <span asp-validation-for="Prenom" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Telephone" class="form-label"></label>
+        <input asp-for="Telephone" class="form-control" />
+        <span asp-validation-for="Telephone" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Email" class="form-label"></label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Login" class="form-label"></label>
+        <input asp-for="Login" class="form-control" />
+        <span asp-validation-for="Login" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="MotDePasse" class="form-label"></label>
+        <input asp-for="MotDePasse" type="password" class="form-control" />
+        <span asp-validation-for="MotDePasse" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="ConfirmMotDePasse" class="form-label"></label>
+        <input asp-for="ConfirmMotDePasse" type="password" class="form-control" />
+        <span asp-validation-for="ConfirmMotDePasse" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100">S’inscrire</button>
+</form>
+
+<p class="mt-3 text-center">
+    Déjà inscrit ? <a asp-action="Login">Se connecter</a>
+</p>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
