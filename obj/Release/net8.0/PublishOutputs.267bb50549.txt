@@ -1,8 +1,0 @@
-C:\Users\ndeye oumy ndoye\Desktop\projet_semestre1_l3\brasilBugerC#\brasilBugerC#\out\brasilBugerC#.exe
-C:\Users\ndeye oumy ndoye\Desktop\projet_semestre1_l3\brasilBugerC#\brasilBugerC#\out\appsettings.Development.json
-C:\Users\ndeye oumy ndoye\Desktop\projet_semestre1_l3\brasilBugerC#\brasilBugerC#\out\appsettings.json
-C:\Users\ndeye oumy ndoye\Desktop\projet_semestre1_l3\brasilBugerC#\brasilBugerC#\out\global.json
-C:\Users\ndeye oumy ndoye\Desktop\projet_semestre1_l3\brasilBugerC#\brasilBugerC#\out\brasilBugerC#.dll
-C:\Users\ndeye oumy ndoye\Desktop\projet_semestre1_l3\brasilBugerC#\brasilBugerC#\out\brasilBugerC#.deps.json
-C:\Users\ndeye oumy ndoye\Desktop\projet_semestre1_l3\brasilBugerC#\brasilBugerC#\out\brasilBugerC#.runtimeconfig.json
-C:\Users\ndeye oumy ndoye\Desktop\projet_semestre1_l3\brasilBugerC#\brasilBugerC#\out\brasilBugerC#.pdb
