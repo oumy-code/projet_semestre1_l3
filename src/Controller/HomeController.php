@@ -4,23 +4,17 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
-class HomeController extends AbstractController
+final class HomeController extends AbstractController
 {
-    #[Route('/', name: 'app_home')]
-    public function index(): Response
-    {
-        return new Response("
-            <html>
-                <body style='font-family: sans-serif; text-align: center; padding-top: 50px;'>
-                    <h1>✅ Brasil Burger Symfony est en ligne !</h1>
-                    <p>Le déploiement sur Render a réussi.</p>
-                    <p>Version PHP : " . PHP_VERSION . "</p>
-                    <hr>
-                    <p><small>Modifiez ce contrôleur pour afficher votre vraie page d'accueil.</small></p>
-                </body>
-            </html>
-        ");
-    }
+    
+#[Route('/', name: 'app_home')] 
+public function index(\Doctrine\DBAL\Connection $connection): Response
+{
+   
+    $dbName = $connection->fetchOne('SELECT current_database()');
+
+    return new Response("Bravo ! Le site est en ligne et connecté à la base : " . $dbName);
+}
 }
