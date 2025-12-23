@@ -19,12 +19,15 @@ RUN a2enmod rewrite
 # Installation de Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Copie des fichiers du projet
+# Copie des fichiers du projet dans le conteneur
 COPY . /var/www/html
 WORKDIR /var/www/html
 
-# Installation des dépendances sans les outils de dev
+# --- FIX: On définit l'environnement de production AVANT l'installation ---
+ENV APP_ENV=prod
+
+# Installation des dépendances sans les outils de dev pour éviter l'erreur DebugBundle
 RUN composer install --no-dev --optimize-autoloader
 
-# Droits sur les dossiers indispensables
+# Droits sur les dossiers indispensables pour Symfony
 RUN chown -R www-data:www-data var/
