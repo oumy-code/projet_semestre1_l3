@@ -8,13 +8,10 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class HomeController extends AbstractController
 {
-    
-#[Route('/', name: 'app_home')] 
-public function index(\Doctrine\DBAL\Connection $connection): Response
-{
-   
-    $dbName = $connection->fetchOne('SELECT current_database()');
-
-    return new Response("Bravo ! Le site est en ligne et connecté à la base : " . $dbName);
-}
+    #[Route('/', name: 'app_home')]
+    public function index(): Response
+    {
+        // Cette ligne redirige immédiatement l'utilisateur vers la page de login
+        return $this->redirectToRoute('app_login');
+    }
 }

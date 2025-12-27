@@ -1,0 +1,112 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier le Burger{% endblock %}
+
+{% block body %}
+<div style="background-color: #f8f9fa; min-height: 100vh; padding: 50px 20px;">
+    <div style="max-width: 900px; margin: 0 auto;">
+        
+        {# Fil d'ariane / Retour #}
+        <a href="{{ path('app_burger_index') }}" style="text-decoration: none; color: #6c757d; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; margin-bottom: 20px; transition: 0.2s;" onmouseover="this.style.color='#333'" onmouseout="this.style.color='#6c757d'">
+            <i class="fas fa-arrow-left"></i> Retour à la liste
+        </a>
+
+        <div style="background: white; border-radius: 24px; padding: 40px; box-shadow: 0 15px 35px rgba(0,0,0,0.05); border: 1px solid #edf2f7;">
+            
+            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 35px; border-bottom: 2px solid #f8f9fa; padding-bottom: 20px;">
+                <div style="background: #fff9db; width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-hamburger" style="color: #FFC107; font-size: 1.5rem;"></i>
+                </div>
+                <div>
+                    <h2 style="font-weight: 800; margin: 0; color: #1a1a1a; font-size: 1.8rem;">Modifier le produit</h2>
+                    <p style="margin: 0; color: #a0aec0; font-size: 0.9rem;">ID Produit: #B-00{{ burger.id }}</p>
+                </div>
+            </div>
+
+            {{ form_start(form) }}
+                <div style="display: grid; grid-template-columns: 1fr 300px; gap: 40px;">
+                    
+                    {# Colonne de gauche : Champs texte #}
+                    <div>
+                        <div style="margin-bottom: 25px;">
+                            <label style="display: block; font-weight: 700; color: #4a5568; margin-bottom: 8px; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.5px;">Nom du burger</label>
+                            {{ form_widget(form.nom, {
+                                'attr': {
+                                    'style': 'width: 100%; padding: 14px; border-radius: 12px; border: 2px solid #edf2f7; outline: none; font-size: 1rem; transition: border-color 0.2s;',
+                                    'placeholder': 'Ex: Le Cheese Royal'
+                                }
+                            }) }}
+                        </div>
+                        
+                        <div style="margin-bottom: 25px;">
+                            <label style="display: block; font-weight: 700; color: #4a5568; margin-bottom: 8px; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.5px;">Prix de vente (FCFA)</label>
+                            <div style="position: relative;">
+                                {{ form_widget(form.prix, {
+                                    'attr': {
+                                        'style': 'width: 100%; padding: 14px; border-radius: 12px; border: 2px solid #edf2f7; outline: none; font-size: 1rem; font-weight: bold; color: #e63946;',
+                                    }
+                                }) }}
+                                <span style="position: absolute; right: 15px; top: 14px; color: #cbd5e0; font-weight: bold;">CFA</span>
+                            </div>
+                        </div>
+
+                        <div style="margin-bottom: 25px;">
+                            <label style="display: block; font-weight: 700; color: #4a5568; margin-bottom: 8px; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.5px;">Lien de l'image</label>
+                            {{ form_widget(form.image, {
+                                'attr': {
+                                    'style': 'width: 100%; padding: 12px; border-radius: 12px; border: 2px solid #edf2f7; outline: none; font-size: 0.9rem; font-family: monospace; color: #718096; background: #fcfcfc;'
+                                }
+                            }) }}
+                        </div>
+                    </div>
+
+                    {# Colonne de droite : Aperçu Image #}
+                    <div style="background: #f8fafc; border-radius: 20px; padding: 20px; border: 1px dashed #cbd5e0;">
+                        <label style="display: block; font-weight: 700; color: #4a5568; margin-bottom: 15px; font-size: 0.8rem; text-transform: uppercase; text-align: center;">Aperçu du visuel</label>
+                        
+                        <div style="position: relative; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 20px rgba(0,0,0,0.1); background: white;">
+                            {% if burger.image %}
+                                <img src="{{ burger.image }}" style="width: 100%; height: 180px; object-fit: cover; display: block;" alt="Aperçu">
+                            {% else %}
+                                <div style="height: 180px; display: flex; align-items: center; justify-content: center; background: #f1f5f9; color: #94a3b8;">
+                                    <i class="fas fa-image fa-3x"></i>
+                                </div>
+                            {% endif %}
+                            <div style="position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.6); color: white; padding: 8px; font-size: 0.7rem; text-align: center; backdrop-filter: blur(4px);">
+                                Image actuelle
+                            </div>
+                        </div>
+                        
+                        <p style="font-size: 0.75rem; color: #718096; margin-top: 15px; text-align: center; font-style: italic;">
+                            L'aperçu se mettra à jour après l'enregistrement.
+                        </p>
+                    </div>
+                </div>
+
+                {# Actions de formulaire #}
+                <div style="display: flex; gap: 15px; margin-top: 40px; padding-top: 30px; border-top: 1px solid #f1f1f1;">
+                    <button type="submit" style="flex: 2; background: linear-gradient(135deg, #333 0%, #000 100%); color: white; border-radius: 12px; padding: 16px; font-weight: 700; border: none; cursor: pointer; font-size: 1rem; transition: transform 0.2s, box-shadow 0.2s; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                        <i class="fas fa-save"></i> METTRE À JOUR LE BURGER
+                    </button>
+                    
+                    <a href="{{ path('app_burger_index') }}" style="flex: 1; background-color: white; color: #4a5568; border: 2px solid #edf2f7; border-radius: 12px; padding: 16px; font-weight: 700; text-decoration: none; text-align: center; transition: 0.2s; display: flex; align-items: center; justify-content: center;">
+                        Annuler
+                    </a>
+                </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Petit effet focus sur les inputs via CSS */
+    input:focus {
+        border-color: #FFC107 !important;
+        box-shadow: 0 0 0 4px rgba(255, 193, 7, 0.1);
+    }
+    button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+</style>
+{% endblock %}

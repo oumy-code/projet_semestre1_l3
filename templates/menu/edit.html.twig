@@ -1,0 +1,127 @@
+{% extends 'base.html.twig' %}
+
+{% block header_title %}Gestion des Menus{% endblock %}
+
+{% block body %}
+<div style="padding: 40px; background-color: #f8f9fa; min-height: 100vh; font-family: 'Segoe UI', sans-serif;">
+    <div style="max-width: 1000px; margin: 0 auto;">
+        
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+            <h1 style="font-weight: 800; color: #1a1a1a; margin: 0;">✏️ Modifier le Menu : {{ menu.nom }}</h1>
+            <a href="{{ path('app_menu_index') }}" style="text-decoration: none; color: #6c757d; font-weight: 600;">Retour à la liste</a>
+        </div>
+
+        {{ form_start(form) }}
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+            
+            {# INFOS GÉNÉRALES #}
+            <div style="background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); height: fit-content;">
+                <h3 style="margin-bottom: 25px; color: #333; font-size: 1.1rem; border-bottom: 3px solid #fbc02d; display: inline-block;">1. Informations</h3>
+                <div style="margin-bottom: 20px;">
+                    <label style="display:block; font-weight:700; margin-bottom:8px;">Nom</label>
+                    {{ form_widget(form.nom, {'attr': {'style': 'width:100%; padding:12px; border-radius:10px; border:1px solid #e2e8f0;'}}) }}
+                </div>
+                <div style="margin-bottom: 20px;">
+                    <label style="display:block; font-weight:700; margin-bottom:8px;">Image</label>
+                    {{ form_widget(form.image, {'attr': {'style': 'width:100%; padding:12px; border-radius:10px; border:1px solid #e2e8f0;'}}) }}
+                </div>
+            </div>
+
+            {# COMPOSITION DYNAMIQUE #}
+            <div style="background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05);">
+                <h3 style="margin-bottom: 25px; color: #333; font-size: 1.1rem; border-bottom: 3px solid #4caf50; display: inline-block;">2. Composition</h3>
+                
+                <div id="compositions-container" 
+                     data-prototype="{{ form_widget(form.compositions.vars.prototype)|e('html_attr') }}"
+                     style="margin-bottom: 20px;">
+                    
+                    {# IMPORTANT : Affichage des éléments déjà existants #}
+                    {% for compoForm in form.compositions %}
+                        {% set isBurger = compoForm.vars.data.burger is not null %}
+                        <div class="composition-row" style="padding:15px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; margin-bottom:10px; border-left: 5px solid {{ isBurger ? '#fd7e14' : '#228be6' }};">
+                            <div class="fields-container">
+                                {{ form_widget(compoForm) }}
+                            </div>
+                            <button type="button" class="remove-btn" onclick="this.parentElement.remove()" style="color:#c53030; background:none; border:none; cursor:pointer; font-weight:700; font-size:0.8rem; margin-top:5px;">× Supprimer</button>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <button type="button" class="btn-add" data-type="burger" style="padding: 12px; background: #fff4e6; border: 2px dashed #fd7e14; border-radius: 12px; cursor: pointer; color: #d9480f; font-weight: 700;">
+                        + Burger
+                    </button>
+                    <button type="button" class="btn-add" data-type="complement" style="padding: 12px; background: #e7f5ff; border: 2px dashed #228be6; border-radius: 12px; cursor: pointer; color: #1971c2; font-weight: 700;">
+                        + Boisson/Frite
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top: 40px; text-align: center;">
+            <button type="submit" style="background: #1a1a1a; color: white; padding: 18px 80px; border-radius: 15px; font-weight: 800; border: none; cursor: pointer;">
+                METTRE À JOUR LE MENU
+            </button>
+        </div>
+        {{ form_widget(form._token) }}
+        {{ form_end(form, {'render_rest': false}) }}
+    </div>
+</div>
+
+<script>
+    // Récupération du script identique à new.html.twig
+    document.querySelectorAll('.btn-add').forEach(button => {
+        button.addEventListener('click', function() {
+            const type = this.dataset.type;
+            const container = document.getElementById('compositions-container');
+            const prototype = container.dataset.prototype;
+            const index = container.querySelectorAll('.composition-row').length;
+            const newForm = prototype.replace(/__name__/g, index);
+            
+            const div = document.createElement('div');
+            div.className = 'composition-row';
+            div.style = "padding:15px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; margin-bottom:10px; position:relative;";
+            
+            div.innerHTML = `
+                <div class="fields-container">${newForm}</div>
+                <button type="button" class="remove-btn" style="color:#c53030; background:none; border:none; cursor:pointer; font-weight:700; font-size:0.8rem; margin-top:5px;">× Supprimer</button>
+            `;
+            
+            container.appendChild(div);
+
+            if (type === 'burger') {
+                const compSelect = div.querySelector('select[name*="[complement]"]');
+                if (compSelect) compSelect.closest('div').style.display = 'none';
+                div.style.borderLeft = "5px solid #fd7e14";
+            } else {
+                const burgSelect = div.querySelector('select[name*="[burger]"]');
+                if (burgSelect) burgSelect.closest('div').style.display = 'none';
+                div.style.borderLeft = "5px solid #228be6";
+            }
+
+            div.querySelector('.remove-btn').addEventListener('click', () => div.remove());
+        });
+    });
+
+    // Masquage automatique des champs inutiles sur les éléments existants au chargement
+    window.addEventListener('DOMContentLoaded', (event) => {
+        document.querySelectorAll('.composition-row').forEach(row => {
+            const burgSelect = row.querySelector('select[name*="[burger]"]');
+            const compSelect = row.querySelector('select[name*="[complement]"]');
+            
+            if (burgSelect && burgSelect.value === "") {
+                burgSelect.closest('div').style.display = 'none';
+            } else if (compSelect && compSelect.value === "") {
+                compSelect.closest('div').style.display = 'none';
+            }
+        });
+    });
+</script>
+
+<style>
+    .composition-row label { display: none !important; }
+    .composition-row select, .composition-row input {
+        width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #cbd5e0; margin-bottom: 8px;
+    }
+</style>
+{% endblock %}

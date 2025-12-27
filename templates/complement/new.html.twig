@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouveau Complément{% endblock %}
+
+{% block body %}
+<div style="padding: 40px; background-color: #f8f9fa; min-height: 100vh; font-family: 'Segoe UI', sans-serif;">
+    <div style="max-width: 800px; margin: 0 auto;">
+        
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+            <h1 style="font-weight: 800; color: #1a1a1a; margin: 0; font-size: 1.8rem;">✨ Ajouter un Complément</h1>
+            <a href="{{ path('app_complement_index') }}" style="text-decoration: none; color: #6c757d; font-weight: 600;">Annuler</a>
+        </div>
+
+        <div style="background: white; border-radius: 20px; padding: 40px; box-shadow: 0 10px 25px rgba(0,0,0,0.05);">
+            {{ form_start(form) }}
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+                    
+                    <div>
+                        <div style="margin-bottom: 25px;">
+                            <label style="display:block; font-weight:700; margin-bottom:8px; color: #4a5568;">Nom du produit</label>
+                            {{ form_widget(form.nom, {'attr': {'style': 'width:100%; padding:12px; border-radius:10px; border:1px solid #e2e8f0; background: #f8fafc;'}}) }}
+                        </div>
+
+                        <div style="margin-bottom: 25px;">
+                            <label style="display:block; font-weight:700; margin-bottom:8px; color: #4a5568;">Type de complément</label>
+                            {{ form_widget(form.type, {'attr': {'style': 'width:100%; padding:12px; border-radius:10px; border:1px solid #e2e8f0; background: #f8fafc;'}}) }}
+                        </div>
+                    </div>
+
+                    <div>
+                        <div style="margin-bottom: 25px;">
+                            <label style="display:block; font-weight:700; margin-bottom:8px; color: #4a5568;">Prix (XOF)</label>
+                            {{ form_widget(form.prix, {'attr': {'style': 'width:100%; padding:12px; border-radius:10px; border:1px solid #e2e8f0; background: #f8fafc;'}}) }}
+                        </div>
+
+                        <div style="margin-bottom: 25px;">
+                            <label style="display:block; font-weight:700; margin-bottom:8px; color: #4a5568;">URL de l'image</label>
+                            {{ form_widget(form.image, {'attr': {'style': 'width:100%; padding:12px; border-radius:10px; border:1px solid #e2e8f0; background: #f8fafc;'}}) }}
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 30px; text-align: center;">
+                    <button type="submit" style="background: #1a1a1a; color: white; padding: 15px 60px; border-radius: 12px; font-weight: 800; border: none; cursor: pointer; transition: 0.3s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
+                        ENREGISTRER LE PRODUIT
+                    </button>
+                </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+{% endblock %}

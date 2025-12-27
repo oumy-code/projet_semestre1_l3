@@ -1,0 +1,211 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des Commandes - Brasil Burger{% endblock %}
+
+{% block header_title %}Liste des Commandes{% endblock %}
+
+{% block stylesheets %}
+<style>
+    /* TES STYLES CSS CONSERVÉS */
+    .filters-section {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 25px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .filters-form {
+        display: flex;
+        gap: 15px;
+        align-items: flex-end;
+        flex-wrap: wrap;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .form-group label {
+        font-size: 0.85rem;
+        font-weight: bold;
+        color: #666;
+    }
+
+    .form-control {
+        padding: 8px 12px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        outline: none;
+    }
+
+    .btn-filter {
+        background-color: var(--primary);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 6px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .table-container {
+        background: white;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    thead {
+        background-color: #f8f9fa;
+        border-bottom: 2px solid #eee;
+    }
+
+    th, td {
+        padding: 15px 20px;
+        text-align: left;
+    }
+
+    tr {
+        border-bottom: 1px solid #eee;
+    }
+
+    .badge-status {
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        color: white; /* Forcé en blanc car on utilise getColor() */
+        display: inline-block;
+    }
+
+    .btn-action {
+        text-decoration: none;
+        color: #4a5568;
+        background: #edf2f7;
+        padding: 6px 10px;
+        border-radius: 5px;
+        font-size: 0.9rem;
+    }
+
+    .btn-action:hover {
+        background: #e2e8f0;
+    }
+
+    .pagination-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 20px;
+        padding: 15px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .disabled {
+        opacity: 0.5;
+        pointer-events: none;
+        cursor: not-allowed;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+    <div class="filters-section">
+        <form action="{{ path('app_commande_filtrer') }}" method="GET" class="filters-form">
+            <div class="form-group">
+                <label>Date</label>
+                <input type="date" name="date" class="form-control" value="{{ filtres.date|default('') }}">
+            </div>
+
+            <div class="form-group">
+                <label>État</label>
+                <select name="etat" class="form-control">
+                    <option value="">Tous les états</option>
+                    {# Synchronisé avec ton Enum en minuscules #}
+                    <option value="en_cours" {{ filtres.etat|default('') == 'en_cours' ? 'selected' : '' }}>En cours</option>
+                    <option value="termine" {{ filtres.etat|default('') == 'termine' ? 'selected' : '' }}>Terminé</option>
+                    <option value="annule" {{ filtres.etat|default('') == 'annule' ? 'selected' : '' }}>Annulé</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn-filter">
+                <i class="fas fa-filter"></i> Filtrer
+            </button>
+            
+            <a href="{{ path('app_commande_index') }}" class="btn-action">Réinitialiser</a>
+        </form>
+    </div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>N° Commande</th>
+                    <th>Date & Heure</th>
+                    <th>Client</th>
+                    <th>Montant Total</th>
+                    <th>État</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for commande in commandes %}
+                    <tr>
+                        <td><strong>#{{ commande.id }}</strong></td>
+                        <td>{{ commande.dateCommande|date('d/m/Y H:i') }}</td>
+                        <td>{{ commande.client.prenom }} {{ commande.client.nom }}</td>
+                        <td><strong>{{ commande.montantTotal|number_format(0, ',', ' ') }} F</strong></td>
+                        <td>
+                            {# Utilisation de tes méthodes d'Enum getColor() et getLabel() #}
+                            <span class="badge-status" style="background-color: {{ commande.etat.color }};">
+                                {{ commande.etat.label }}
+                            </span>
+                        </td>
+                        <td>
+                            <a href="{{ path('app_commande_detail', {'id': commande.id}) }}" class="btn-action">
+                                <i class="fas fa-eye"></i> Détails
+                            </a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 40px; color: #999;">
+                            Aucune commande trouvée.
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {# BLOC DE PAGINATION CORRIGÉ #}
+    <div class="pagination-bar">
+        <div class="page-info">
+            Page <strong>{{ currentPage }}</strong>
+        </div>
+        <div class="pagination-buttons">
+            {% set currentParams = app.request.query.all %}
+            
+            <a href="{{ path(app.request.attributes.get('_route'), currentParams|merge({'page': currentPage - 1})) }}" 
+               class="btn-action {{ currentPage <= 1 ? 'disabled' : '' }}">
+               <i class="fas fa-chevron-left"></i> Précédent
+            </a>
+
+            {# Le bouton suivant se désactive si on a moins de 6 résultats sur la page #}
+            <a href="{{ path(app.request.attributes.get('_route'), currentParams|merge({'page': currentPage + 1})) }}" 
+               class="btn-action {{ commandes|length < 6 ? 'disabled' : '' }}">
+               Suivant <i class="fas fa-chevron-right"></i>
+            </a>
+        </div>
+    </div>
+{% endblock %}

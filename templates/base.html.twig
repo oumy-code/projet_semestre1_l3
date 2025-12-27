@@ -1,17 +1,67 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
-        {% block stylesheets %}
-        {% endblock %}
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Brasil Burger{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #ffcc00;
+            --dark-sidebar: #02050aff;
+            --bg-body: #f4f7f6;
+            --danger: #e53e3e;
+            --border-color: #e2e8f0;
+            --text-muted: #a0aec0;
+        }
 
-        {% block javascripts %}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
-        {% endblock %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-    </body>
+        body { margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg-body); }
+        
+        /* Layout */
+        .container { display: flex; min-height: 100vh; }
+
+        /* Sidebar Style */
+        .sidebar { width: 260px; background: var(--dark-sidebar); color: white; display: flex; flex-direction: column; }
+        .sidebar .logo { padding: 30px 20px; text-align: center; border-bottom: 1px solid #2d3748; }
+        .sidebar .logo img { max-width: 120px; margin-bottom: 10px; }
+        .sidebar .logo p { font-size: 0.75rem; color: var(--primary); font-weight: bold; letter-spacing: 2px; margin: 0; }
+        
+        .sidebar .menu { list-style: none; padding: 20px 0; margin: 0; }
+        .sidebar .menu li { margin: 5px 15px; }
+        .sidebar .menu a { 
+            display: flex; align-items: center; gap: 15px; padding: 12px 15px; 
+            color: var(--text-muted); text-decoration: none; border-radius: 8px; transition: 0.3s;
+        }
+        .sidebar .menu li.active a, .sidebar .menu a:hover { background: #2d3748; color: var(--primary); }
+
+        /* Main Content */
+        .main-content { flex: 1; padding: 20px 40px; }
+        header { 
+            display: flex; justify-content: space-between; align-items: center; 
+            padding-bottom: 20px; border-bottom: 1px solid var(--border-color); margin-bottom: 30px; 
+        }
+        .logout { 
+            background: white; color: var(--danger); padding: 8px 15px; 
+            border-radius: 8px; text-decoration: none; font-weight: bold; border: 1px solid #feb2b2; 
+        }
+    </style>
+    {% block stylesheets %}{% endblock %}
+</head>
+<body>
+    <div class="container">
+        {# Le menu est inclus ICI une seule fois pour tout le site #}
+        {% include 'components/sidebar.html.twig' %}
+
+        <main class="main-content">
+            <header>
+                <h1>{% block header_title %}Bienvenue, {{ app.user.prenom }}{% endblock %}</h1>
+                <a href="{{ path('app_logout') }}" class="logout"><i class="fas fa-power-off"></i> Déconnexion</a>
+            </header>
+
+            {% block body %}{% endblock %}
+        </main>
+    </div>
+    {% block javascripts %}{% endblock %}
+</body>
 </html>

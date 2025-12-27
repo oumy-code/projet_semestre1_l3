@@ -1,0 +1,253 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des Commandes - Brasil Burger{% endblock %}
+
+{% block body %}
+<div class="container">
+    {% include 'partials/_sidebar.html.twig' %}
+
+    <main class="main-content">
+        <header>
+            <h1>Gestion des Commandes</h1>
+            <a href="{{ path('app_logout') }}" class="logout">Déconnexion</a>
+        </header>
+
+        {# Messages flash #}
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success">{{ message }}</div>
+        {% endfor %}
+        {% for message in app.flashes('error') %}
+            <div class="alert alert-error">{{ message }}</div>
+        {% endfor %}
+
+        {# Filtres #}
+        <section class="filter-section">
+            {{ form_start(form, {'attr': {'class': 'filter-form'}}) }}
+                <div class="filter-grid">
+                    <div class="filter-item">
+                        {{ form_label(form.etat, 'État') }}
+                        {{ form_widget(form.etat) }}
+                    </div>
+                    <div class="filter-item">
+                        {{ form_label(form.dateDebut, 'Date début') }}
+                        {{ form_widget(form.dateDebut) }}
+                    </div>
+                    <div class="filter-item">
+                        {{ form_label(form.dateFin, 'Date fin') }}
+                        {{ form_widget(form.dateFin) }}
+                    </div>
+                    <div class="filter-item">
+                        {{ form_label(form.clientNom, 'Client') }}
+                        {{ form_widget(form.clientNom) }}
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-filter"></i> Filtrer
+                </button>
+                <a href="{{ path('app_commande_list') }}" class="btn btn-secondary">
+                    <i class="fas fa-times"></i> Réinitialiser
+                </a>
+            {{ form_end(form) }}
+        </section>
+
+        {# Liste des commandes #}
+        <section class="data-box">
+            <h3><i class="fas fa-list"></i> Liste des commandes ({{ commandes|length }})</h3>
+            
+            {% if commandes|length > 0 %}
+                <table class="commande-table">
+                    <thead>
+                        <tr>
+                            <th>N°</th>
+                            <th>Client</th>
+                            <th>Date</th>
+                            <th>Montant</th>
+                            <th>Type</th>
+                            <th>État</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for commande in commandes %}
+                            <tr>
+                                <td>#{{ commande.id }}</td>
+                                <td>
+                                    <strong>{{ commande.client.prenom }} {{ commande.client.nom }}</strong><br>
+                                    <small>{{ commande.client.telephone }}</small>
+                                </td>
+                                <td>{{ commande.dateCommande|date('d/m/Y H:i') }}</td>
+                                <td class="price">{{ commande.montantTotal|number_format(0, ',', ' ') }} FCFA</td>
+                                <td>
+                                    <span class="badge badge-{{ commande.typeRecuperation.value }}">
+                                        {{ commande.typeRecuperation.value|replace({'_': ' '})|capitalize }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="status {{ commande.etat.color }}">
+                                        {{ commande.etat.label }}
+                                    </span>
+                                </td>
+                                <td class="actions">
+                                    <a href="{{ path('app_commande_detail', {id: commande.id}) }}" 
+                                       class="btn-icon" title="Voir détails">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    
+                                    {% if commande.etat.value == 'en_cours' %}
+                                        <form method="post" 
+                                              action="{{ path('app_commande_terminer', {id: commande.id}) }}" 
+                                              style="display: inline;">
+                                            <button type="submit" class="btn-icon green" title="Terminer">
+                                                <i class="fas fa-check"></i>
+                                            </button>
+                                        </form>
+                                        
+                                        <form method="post" 
+                                              action="{{ path('app_commande_annuler', {id: commande.id}) }}" 
+                                              style="display: inline;"
+                                              onsubmit="return confirm('Voulez-vous vraiment annuler cette commande ?');">
+                                            <button type="submit" class="btn-icon red" title="Annuler">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </form>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p class="no-data">Aucune commande trouvée</p>
+            {% endif %}
+        </section>
+    </main>
+</div>
+
+<style>
+.filter-section {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.filter-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.filter-item label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+}
+
+.filter-item input,
+.filter-item select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-right: 10px;
+}
+
+.btn-primary {
+    background-color: #ffcc00;
+    color: #000;
+}
+
+.btn-secondary {
+    background-color: #666;
+    color: white;
+}
+
+.commande-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.commande-table th,
+.commande-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.commande-table th {
+    background-color: #f5f5f5;
+    font-weight: bold;
+}
+
+.commande-table tbody tr:hover {
+    background-color: #f9f9f9;
+}
+
+.badge {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    text-transform: uppercase;
+}
+
+.badge-sur_place { background: #e3f2fd; color: #1976d2; }
+.badge-a_recuperer { background: #fff3e0; color: #f57c00; }
+.badge-livraison { background: #f3e5f5; color: #7b1fa2; }
+
+.actions {
+    white-space: nowrap;
+}
+
+.btn-icon {
+    display: inline-block;
+    padding: 6px 10px;
+    margin-right: 5px;
+    border: none;
+    background: #64a3f1;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.btn-icon.green { background: #5ecf66; }
+.btn-icon.red { background: #f16464; }
+.btn-icon:hover { opacity: 0.8; }
+
+.alert {
+    padding: 12px 20px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
+
+.alert-success {
+    background: #d4edda;
+    color: #155724;
+    border-left: 4px solid #28a745;
+}
+
+.alert-error {
+    background: #f8d7da;
+    color: #721c24;
+    border-left: 4px solid #dc3545;
+}
+
+.no-data {
+    text-align: center;
+    padding: 40px;
+    color: #999;
+    font-style: italic;
+}
+</style>
+{% endblock %}

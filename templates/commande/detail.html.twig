@@ -1,0 +1,235 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détail Commande #{{ commande.id }}{% endblock %}
+
+{% block header_title %}Détail de la Commande #{{ commande.id }}{% endblock %}
+
+{% block stylesheets %}
+<style>
+    :root {
+        --primary-color: #ff9800; /* Orange Brasil Burger */
+        --dark-color: #2d3436;
+        --light-bg: #f4f7f6;
+    }
+
+    .detail-container {
+        padding: 20px;
+        background: var(--light-bg);
+        border-radius: 15px;
+    }
+
+    .btn-back {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: #666;
+        text-decoration: none;
+        font-weight: bold;
+        margin-bottom: 20px;
+        transition: color 0.3s;
+    }
+
+    .btn-back:hover { color: var(--primary-color); }
+
+    .info-card {
+        background: white;
+        border-radius: 12px;
+        border: none;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        height: 100%;
+    }
+
+    .card-header-custom {
+        padding: 15px 20px;
+        border-radius: 12px 12px 0 0 !important;
+        font-weight: bold;
+        color: white;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .bg-client { background-color: #4a90e2; }
+    .bg-actions { background-color: var(--dark-color); }
+
+    .info-item {
+        margin-bottom: 12px;
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 1px dashed #eee;
+        padding-bottom: 8px;
+    }
+
+    .info-label { color: #888; font-size: 0.9rem; }
+    .info-value { font-weight: 600; color: #333; }
+
+    .badge-custom {
+        padding: 6px 15px;
+        border-radius: 20px;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        color: white;
+        font-weight: bold;
+    }
+
+    /* Table Styles */
+    .products-card {
+        margin-top: 30px;
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    }
+
+    .table-custom {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .table-custom th {
+        background: #f8f9fa;
+        padding: 15px;
+        text-align: left;
+        color: #666;
+        font-size: 0.85rem;
+    }
+
+    .table-custom td {
+        padding: 15px;
+        border-top: 1px solid #eee;
+    }
+
+    .total-row {
+        background: #fff9f0;
+        font-size: 1.1rem;
+    }
+
+    /* Buttons */
+    .actions-group {
+        display: flex;
+        gap: 10px;
+        padding: 15px;
+    }
+
+    .btn-custom {
+        flex: 1;
+        padding: 12px;
+        border: none;
+        border-radius: 8px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: transform 0.2s, opacity 0.3s;
+    }
+
+    .btn-custom:hover:not(:disabled) { transform: translateY(-2px); }
+    .btn-success-custom { background: #2ecc71; color: white; }
+    .btn-danger-custom { background: #e74c3c; color: white; }
+    
+    .btn-custom:disabled {
+        opacity: 0.3;
+        cursor: not-allowed;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="detail-container">
+    <a href="{{ path('app_commande_index') }}" class="btn-back">
+        <i class="fas fa-arrow-left"></i> Retour à la liste des commandes
+    </a>
+
+    <div class="row">
+        {# Carte Client #}
+        <div class="col-md-6 mb-4">
+            <div class="info-card">
+                <div class="card-header-custom bg-client">
+                    <i class="fas fa-user"></i> Informations Client
+                </div>
+                <div class="card-body p-4">
+                    <div class="info-item">
+                        <span class="info-label">Client</span>
+                        <span class="info-value">{{ client.prenom }} {{ client.nom }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Date de commande</span>
+                        <span class="info-value">{{ commande.dateCommande|date('d/m/Y H:i') }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Statut actuel</span>
+                        <span class="badge-custom" style="background-color: {{ commande.etat.color }};">
+                            {{ commande.etat.label }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {# Carte Actions #}
+        <div class="col-md-6 mb-4">
+            <div class="info-card">
+                <div class="card-header-custom bg-actions">
+                    <i class="fas fa-cog"></i> Actions sur la commande
+                </div>
+                <div class="card-body p-4">
+                    <p class="text-muted small mb-3">Mettre à jour l'état de la commande :</p>
+                    <div class="actions-group">
+                        <form action="{{ path('app_commande_terminer', {'id': commande.id}) }}" method="POST" style="flex:1">
+                            <button class="btn-custom btn-success-custom" 
+                                {% if commande.etat.value in ['termine', 'annule'] %}disabled{% endif %}>
+                                <i class="fas fa-check"></i> Terminer
+                            </button>
+                        </form>
+
+                        <form action="{{ path('app_commande_annuler', {'id': commande.id}) }}" method="POST" style="flex:1">
+                            <button class="btn-custom btn-danger-custom" 
+                                onclick="return confirm('Confirmer l\'annulation ?')"
+                                {% if commande.etat.value in ['annule', 'termine'] %}disabled{% endif %}>
+                                <i class="fas fa-times"></i> Annuler
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# Liste des produits #}
+    <div class="products-card">
+        <div class="p-3 bg-light border-bottom">
+            <h5 class="mb-0"><i class="fas fa-shopping-basket me-2"></i> Produits commandés</h5>
+        </div>
+        <div class="table-responsive">
+            <table class="table-custom">
+                <thead>
+                    <tr>
+                        <th>Désignation du produit</th>
+                        <th>Prix Unitaire</th>
+                        <th>Quantité</th>
+                        <th class="text-end">Sous-total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ligne in lignes %}
+                        <tr>
+                            <td>
+                                <span class="fw-bold text-dark">{{ ligne.nomProduit }}</span>
+                            </td>
+                            <td>{{ ligne.prixUnitaire|number_format(0, ',', ' ') }} F</td>
+                            <td><span class="badge bg-light text-dark border">x {{ ligne.quantite }}</span></td>
+                            <td class="text-end fw-bold">{{ ligne.sousTotal|number_format(0, ',', ' ') }} F</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr class="total-row">
+                        <th colspan="3" class="text-end text-uppercase">Total de la commande</th>
+                        <th class="text-end" style="color: var(--primary-color); font-size: 1.4rem;">
+                            {{ commande.montantTotal|number_format(0, ',', ' ') }} FCFA
+                        </th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

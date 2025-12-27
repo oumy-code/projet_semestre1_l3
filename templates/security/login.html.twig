@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion - Brasil Burger</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #000000 0%, #333333 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 400px;
+            padding: 40px;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo img {
+            max-width: 120px;
+            margin-bottom: 10px;
+        }
+
+        .logo p {
+            color: #ffcc00;
+            font-size: 12px;
+            letter-spacing: 2px;
+            font-weight: bold;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px 12px 12px 45px;
+            border: 2px solid #eee;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            outline: none;
+            border-color: #ffcc00;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #dc3545;
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 14px;
+            background: #ffcc00;
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button[type="submit"]:hover {
+            background: #e6b800;
+        }
+
+        .footer-text {
+            text-align: center;
+            margin-top: 20px;
+            color: #999;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo">
+            <img src="https://d1mzjggyz5012h.cloudfront.net/whatsaf.com/logos/ba09d1b6bd0ea38a_75620eb8bad113b4_Logo-Brasil-Burger.png?width=300" alt="Logo Brasil Burger">
+            <p>TRÈS DÉLICIEUX !</p>
+        </div>
+
+        <h1>Connexion Gestionnaire</h1>
+
+        {% if error %}
+            <div class="error-message">
+                <i class="fas fa-exclamation-circle"></i>
+                {{ error.messageKey|trans(error.messageData, 'security') }}
+            </div>
+        {% endif %}
+
+        <form method="post" action="{{ path('app_login') }}">
+            <div class="form-group">
+                <label for="username">Login</label>
+                <div class="input-group">
+                    <i class="fas fa-user"></i>
+                    <input type="text" 
+                           id="username" 
+                           name="_username" 
+                           value="{{ last_username }}" 
+                           placeholder="Votre login"
+                           required 
+                           autofocus>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Mot de passe</label>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" 
+                           id="password" 
+                           name="_password" 
+                           placeholder="Votre mot de passe"
+                           required>
+                </div>
+            </div>
+
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+            <button type="submit">
+                <i class="fas fa-sign-in-alt"></i> Se connecter
+            </button>
+        </form>
+
+        <p class="footer-text">
+            © 2025 Brasil Burger - Gestion des commandes
+        </p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<nav class="sidebar">
+    <div class="logo">
+        <img src="https://d1mzjggyz5012h.cloudfront.net/whatsaf.com/logos/ba09d1b6bd0ea38a_75620eb8bad113b4_Logo-Brasil-Burger.png?width=300" alt="Logo Brasil Burger">
+        <p>TRÈS DÉLICIEUX !</p>
+    </div>
+    
+    <ul class="menu">
+        {# Lien Tableau de Bord #}
+        <li class="{{ app.request.attributes.get('_route') == 'app_dashboard' ? 'active' : '' }}">
+            <a href="{{ path('app_dashboard') }}">
+                <i class="fas fa-chart-bar"></i> Tableau de Bord
+            </a>
+        </li>
+
+        {# Lien Burgers (Remplacez 'app_burger_index' par votre vraie route si différente) #}
+       <li class="{{ app.request.attributes.get('_route') starts with 'app_burger' ? 'active' : '' }}">
+            <a href="{{ path('app_burger_index') }}">
+                <i class="fas fa-hamburger"></i> Burgers
+            </a>
+        </li>
+        {# Lien Menu #}
+      <li class="{{ app.request.attributes.get('_route') starts with 'app_menu' ? 'active' : '' }}">
+    <a href="{{ path('app_menu_index') }}">
+        <i class="fas fa-clipboard-list"></i>
+        <span>Menus</span>
+    </a>
+</li>
+       {# Lien Compléments #}
+<li class="{{ app.request.attributes.get('_route') starts with 'app_complement' ? 'active' : '' }}">
+    <a href="{{ path('app_complement_index') }}">
+        <i class="fas fa-utensils"></i> 
+        <span>Compléments</span>
+    </a>
+</li>
+     {# LIEN COMMANDES : On active seulement si c'est la liste, l'ajout ou la modification (mais pas la livraison) #}
+{% set currentRoute = app.request.attributes.get('_route') %}
+
+<li class="{{ (currentRoute starts with 'app_commande' and currentRoute != 'app_commande_livraison') ? 'active' : '' }}">
+    <a href="{{ path('app_commande_index') }}">
+        <i class="fas fa-shopping-cart"></i> 
+        <span>Commandes</span>
+    </a>
+</li>
+
+{# LIEN LIVRAISONS : On active uniquement si c'est strictement la route de livraison #}
+<li class="{{ currentRoute == 'app_commande_livraison' ? 'active' : '' }}">
+    <a href="{{ path('app_commande_livraison') }}">
+        <i class="fas fa-bicycle"></i> 
+        <span>Livraisons</span>
+    </a>
+</li>
+    </ul>
+</nav>
