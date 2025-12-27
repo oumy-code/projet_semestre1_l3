@@ -1,7 +1,7 @@
 <?php
 // src/Repository/MenuRepositoryInterface.php
 
-namespace App\Repository;
+namespace App\Repository\Interface;
 
 use App\Entity\Menu;
 use Doctrine\ORM\Query;
