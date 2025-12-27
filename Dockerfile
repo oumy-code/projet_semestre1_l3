@@ -1,7 +1,7 @@
 # Utilisation de l'image officielle PHP 8.4 avec Apache
 FROM php:8.4-apache
 
-# Installation des dépendances système pour Symfony
+# Installation des dépendances système pour Symfony et PostgreSQL
 RUN apt-get update && apt-get install -y \
     libicu-dev \
     libpq-dev \
@@ -11,9 +11,18 @@ RUN apt-get update && apt-get install -y \
     git \
     && docker-php-ext-install intl opcache pdo pdo_mysql pdo_pgsql zip
 
-# Configuration du DocumentRoot d'Apache vers le dossier /public de Symfony
+# --- CONFIGURATION APACHE ---
+# On définit le dossier public comme racine du serveur
 ENV APACHE_DOCUMENT_ROOT /var/www/html/public
+
+# Mise à jour de la configuration des sites Apache
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/000-default.conf
+RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf
+
+# IMPORTANT : Autorise la lecture du fichier .htaccess (AllowOverride All)
+RUN sed -i '/<Directory \/var\/www\/>/,/<\/Directory>/ s/AllowOverride None/AllowOverride All/' /etc/apache2/apache2.conf
+
+# Active le module de réécriture d'URL (mod_rewrite)
 RUN a2enmod rewrite
 
 # Installation de Composer
@@ -23,11 +32,14 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 COPY . /var/www/html
 WORKDIR /var/www/html
 
-# --- FIX: On définit l'environnement de production AVANT l'installation ---
+# --- CONFIGURATION SYMFONY ---
 ENV APP_ENV=prod
 
-# Installation des dépendances sans les outils de dev pour éviter l'erreur DebugBundle
+# Installation des dépendances (sans les outils de dev)
 RUN composer install --no-dev --optimize-autoloader
 
-# Droits sur les dossiers indispensables pour Symfony
+# Droits sur les dossiers de cache et de logs
 RUN chown -R www-data:www-data var/
+
+# Exposition du port 80
+EXPOSE 80
